@@ -1,0 +1,2 @@
+We can also have a web demonstrator! One field with the variable names, one field with the objectives, one field with the constraints.
+Generate the cpp file from these fields (beware of code injections), compile, run and display the result.
