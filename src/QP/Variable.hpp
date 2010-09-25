@@ -16,7 +16,6 @@ class LinearForm;
 class Variable {
 public:
     Variable( const std::string& name = "" );
-    Variable( const Variable& );
 
 public:
     double getValue() const;

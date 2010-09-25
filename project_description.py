@@ -15,3 +15,10 @@ Executable(
     localLibraries = [ "qp" ],
     externalLibraries = []
 )
+
+Executable(
+    name = "spring_chain_example",
+    sources = [ "src/spring_chain_example.cpp" ],
+    localLibraries = [ "qp" ],
+    externalLibraries = []
+)
