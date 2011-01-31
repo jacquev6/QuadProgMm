@@ -47,7 +47,7 @@ public:
     friend QuadraticForm operator * ( const Variable&, const Variable& );
 
 private:
-    std::string m_name;
+    std::string m_name; /// @todo Remove this variable
     ResolvablePtr m_resolvable;
 };
 
