@@ -1,6 +1,6 @@
 from ViDE.Project.Description import *
 
-DynamicLibrary(
+CppDynamicLibrary(
     name = "qp",
     sources = AllCppIn( "src/QP" ),
     headers = AllHppIn( "src/QP" ),
