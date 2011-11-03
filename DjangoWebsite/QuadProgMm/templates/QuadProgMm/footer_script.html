@@ -1,0 +1,22 @@
+<script type="text/javascript" src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+
+<script type="text/javascript" >
+YUI().use( "node", function( Y ) {
+    function update() {
+        Y.Node.one( "#theCode" ).set( "src", "{% url QuadProgMm.views.generate %}?"
+            + "variables=" + encodeURIComponent( Y.Node.one( "#theVariables" ).get( "value" ) ) + ";"
+            + "objectives=" + encodeURIComponent( Y.Node.one( "#theObjectives" ).get( "value" ) ) + ";"
+            + "constraints=" + encodeURIComponent( Y.Node.one( "#theConstraints" ).get( "value" ) ) + ";"
+        );
+        Y.Node.one( "#theOutput" ).set( "src", "{% url QuadProgMm.views.compile %}?"
+            + "variables=" + encodeURIComponent( Y.Node.one( "#theVariables" ).get( "value" ) ) + ";"
+            + "objectives=" + encodeURIComponent( Y.Node.one( "#theObjectives" ).get( "value" ) ) + ";"
+            + "constraints=" + encodeURIComponent( Y.Node.one( "#theConstraints" ).get( "value" ) ) + ";"
+        );
+    }
+
+    update();
+    Y.Node.one( "#theButton" ).on( "click", update );
+} );
+</script>
+
