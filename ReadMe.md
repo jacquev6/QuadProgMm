@@ -14,7 +14,7 @@ Let's say that your want to compute the positions of a chain of springs.
 
 <img src="example_spring_chain.svg"/>
 
-First, let's define a struct to represent a spring. It's a simple aggregate with the spring's strength, and it's unconstrained length:
+First, let's define a struct to represent a spring. It's a simple aggregate with the spring's strength, and its unconstrained length:
 
     struct Spring {
         Spring( float strength_, float length_ ) :
@@ -69,7 +69,7 @@ Then, the most important part is the definition of `SpringChain::resolve`:
     void SpringChain::resolve() {
 
 First, we define the objectives: each spring has a potential energy of \\(1/2 \\cdot k \\cdot (l - l_0)\\),
-and the balance position is achieved when the energy is minimal. Our objective is to minimize the sum of all those eneries.
+and the balance position is achieved when the energy is minimal. Our objective is to minimize the sum of all those energies.
 So, we fill a `QP::Objectives` (a vector) with one objective per spring:
 
         QP::Objectives objectives;
