@@ -15,9 +15,7 @@ class ValidationException( Exception ):
     pass
 
 def generate( request ):
-    variables = request.GET[ "variables" ].split( "\n" )
-    objectives = request.GET[ "objectives" ].split( "\n" )
-    constraints = request.GET[ "constraints" ].split( "\n" )
+    variables, objectives, constraints = extractInput( request )
     return render_to_response(
         'QuadProgMm/generate.cpp',
         { "variables": variables, "objectives": objectives, "constraints": constraints },
@@ -25,9 +23,7 @@ def generate( request ):
     )
 
 def compile( request ):
-    variables = request.GET[ "variables" ].split( "\n" )
-    objectives = request.GET[ "objectives" ].split( "\n" )
-    constraints = request.GET[ "constraints" ].split( "\n" )
+    variables, objectives, constraints = extractInput( request )
     try:
         validateInput( variables, objectives, constraints )
         code = render_to_string(
@@ -62,6 +58,25 @@ def compile( request ):
         response = HttpResponse( mimetype = 'text/plain' )
         response.write( e )
         return response
+
+def extractInput( request ):
+    if "variables" in request.GET:
+        variables = request.GET[ "variables" ].split( "\n" )
+    else:
+        variables = list()
+
+    if "objectives" in request.GET:
+        objectives = request.GET[ "objectives" ].split( "\n" )
+    else:
+        objectives = list()
+
+    if "constraints" in request.GET:
+        constraints = request.GET[ "constraints" ].split( "\n" )
+    else:
+        constraints = list()
+
+    return variables, objectives, constraints
+
 
 class validateInput:
     def __init__( self, variables, objectives, constraints ):
