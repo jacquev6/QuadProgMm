@@ -11,22 +11,22 @@ namespace QP {
 
 class Objective {
 public:
-    static Objective Minimize( const QuadraticForm&, double weight = 1 );
-    static Objective Maximize( const QuadraticForm&, double weight = 1 );
-    static Objective Value( const LinearForm&, double target, double weight = 1 );
-    static Objective Difference( const LinearForm&, const LinearForm&, double target, double weight = 1 );
+  static Objective Minimize(const QuadraticForm&, double weight = 1);
+  static Objective Maximize(const QuadraticForm&, double weight = 1);
+  static Objective Value(const LinearForm&, double target, double weight = 1);
+  static Objective Difference(const LinearForm&, const LinearForm&, double target, double weight = 1);
 
 private:
-    Objective( const QuadraticForm& );
+  Objective(const QuadraticForm&);
 
 public:
-    const QuadraticForm& getQuadraticForm() const;
+  const QuadraticForm& getQuadraticForm() const;
 
 private:
-    QuadraticForm m_quadraticForm;
+  QuadraticForm m_quadraticForm;
 };
 
-typedef std::vector< Objective > Objectives;
+typedef std::vector<Objective> Objectives;
 
 } // Namespace
 

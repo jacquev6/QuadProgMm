@@ -15,40 +15,40 @@ class LinearForm;
 
 class Variable {
 public:
-    Variable( const std::string& name = "" );
+  Variable(const std::string& name = "");
 
 public:
-    double getValue() const;
+  double getValue() const;
 
 public:
-    class Resolvable;
-    typedef boost::shared_ptr< Resolvable > ResolvablePtr;
+  class Resolvable;
+  typedef boost::shared_ptr<Resolvable> ResolvablePtr;
 
 public:
-    friend std::ostream& operator << ( std::ostream&, const Variable& );
+  friend std::ostream& operator << (std::ostream&, const Variable&);
 
 public:
-    operator LinearForm () const;
-    operator QuadraticForm () const;
-    LinearForm operator - () const;
+  operator LinearForm () const;
+  operator QuadraticForm () const;
+  LinearForm operator - () const;
 
-    friend LinearForm operator + ( const Variable&, double );
-    friend LinearForm operator + ( double, const Variable& );
-    friend LinearForm operator + ( const Variable&, const Variable& );
+  friend LinearForm operator + (const Variable&, double);
+  friend LinearForm operator + (double, const Variable&);
+  friend LinearForm operator + (const Variable&, const Variable&);
 
-    friend LinearForm operator - ( const Variable&, double );
-    friend LinearForm operator - ( double, const Variable& );
-    friend LinearForm operator - ( const Variable&, const Variable& );
+  friend LinearForm operator - (const Variable&, double);
+  friend LinearForm operator - (double, const Variable&);
+  friend LinearForm operator - (const Variable&, const Variable&);
 
-    friend LinearForm operator * ( const Variable&, double );
-    friend LinearForm operator / ( const Variable&, double );
-    friend LinearForm operator * ( double, const Variable& );
+  friend LinearForm operator * (const Variable&, double);
+  friend LinearForm operator / (const Variable&, double);
+  friend LinearForm operator * (double, const Variable&);
 
-    friend QuadraticForm operator * ( const Variable&, const Variable& );
+  friend QuadraticForm operator * (const Variable&, const Variable&);
 
 private:
-    std::string m_name; /// @todo Remove this variable
-    ResolvablePtr m_resolvable;
+  std::string m_name; /// @todo Remove this variable
+  ResolvablePtr m_resolvable;
 };
 
 } // Namespace

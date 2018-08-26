@@ -15,20 +15,20 @@ namespace QP {
 
 class Variable::Resolvable {
 public:
-    Resolvable( const std::string& name );
-    Resolvable( const Resolvable& );
+  Resolvable(const std::string& name);
+  Resolvable(const Resolvable&);
 
 public:
-    void setValue( double value );
-    bool isResolved() const;
-    double getValue() const;
+  void setValue(double value);
+  bool isResolved() const;
+  double getValue() const;
 
 public:
-    friend std::ostream& operator << ( std::ostream&, const Variable::Resolvable& );
+  friend std::ostream& operator << (std::ostream&, const Variable::Resolvable&);
 
 private:
-    boost::optional< double > m_value;
-    std::string m_name;
+  boost::optional<double> m_value;
+  std::string m_name;
 };
 
 } // Namespace
