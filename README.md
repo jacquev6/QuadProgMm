@@ -3,7 +3,7 @@ Introduction
 
 [Quadratic programming](http://en.wikipedia.org/wiki/Quadratic_programming) problems are generaly specified using matrices and vectors,
 because this is the form used by resolution algorithms.
-This is true for example for [QuadProg++](http://quadprog.sourceforge.net), which I use as algorithmic fundation of this library.
+This is true for example for [QuadProg++](https://github.com/liuq/QuadProgpp), which I use as algorithmic fundation of this library.
 
 What I propose here is to specify your QP with C++ expressions of C++ variables, and let my library do what is needed to invoke QuadProg++'s algorithms.
 

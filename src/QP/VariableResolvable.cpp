@@ -14,7 +14,7 @@ void Variable::Resolvable::setValue( double value ) {
 }
 
 bool Variable::Resolvable::isResolved() const {
-    return m_value;
+    return (bool)m_value;
 }
 
 double Variable::Resolvable::getValue() const {
