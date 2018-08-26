@@ -9,8 +9,10 @@
 #define foreach BOOST_FOREACH
 
 // QuadProg++
-#include "QuadProg++.hpp"
-#undef solve // WTF!!!
+#include "QuadProg++.hh"
+#undef det
+#undef inverse
+#undef solve
 
 // QP
 #include "VariableResolvable.hpp"
@@ -70,8 +72,8 @@ double Problem::solve() const {
   int m = m_equalityConstraints;
   int p = m_inequalityConstraints;
 
-  QuadProgPP::Matrix<double> G, CE, CI;
-  QuadProgPP::Vector<double> G0, CE0, CI0, x;
+  quadprogpp::Matrix<double> G, CE, CI;
+  quadprogpp::Vector<double> G0, CE0, CI0, x;
   G.resize(n, n);
   G0.resize(n);
   CE.resize(n, m);
@@ -119,8 +121,8 @@ double Problem::solve() const {
 
   int index = 0;
   foreach(Constraint c, m_constraints) {
-    QuadProgPP::Matrix<double>& C = c.isEquality() ? CE : CI;
-    QuadProgPP::Vector<double>& C0 = c.isEquality() ? CE0 : CI0;
+    quadprogpp::Matrix<double>& C = c.isEquality() ? CE : CI;
+    quadprogpp::Vector<double>& C0 = c.isEquality() ? CE0 : CI0;
 
     const LinearForm& l = c.getLinearForm();
     foreach(LinearForm::Coefficient c, l.getCoefficients()) {
@@ -135,7 +137,7 @@ double Problem::solve() const {
 
   //std::cout << G << std::endl << G0 << std::endl;
 
-  double cost = QuadProgPP::solve_quadprog(G, G0, CE, CE0, CI, CI0, x);
+  double cost = quadprogpp::solve_quadprog(G, G0, CE, CE0, CI, CI0, x);
 
   for(int i = 0; i < n; ++i) {
     assert(m_variables.right.find(i) != m_variables.right.end());
