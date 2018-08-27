@@ -40,22 +40,10 @@ then
   cd ..
 fi
 
-mkdir -p build
-rm -rf build/*
-cd build
-g++ -I../QuadProgpp/src -c ../src/QP/*.cpp
-cd ..
+make lib
 
 sphinx-build doc docs
 
 show_in_browser "Documentation" $PROJECT_ROOT/docs/index.html
 
-cd build
-
-g++ -I../src ../doc/user_guide/artifacts/spring_chain_example.cpp *.o ../QuadProgpp/src/libquadprog.a -o spring_chain_example
-./spring_chain_example >../doc/user_guide/spring_chain_example.out
-
-g++ -I../src ../doc/user_guide/artifacts/quick_start.cpp *.o ../QuadProgpp/src/libquadprog.a -o quick_start
-./quick_start >../doc/user_guide/quick_start.out
-
-cd ..
+make post_doc
