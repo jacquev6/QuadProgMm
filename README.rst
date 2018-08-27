@@ -36,13 +36,13 @@ Create variables::
 
 State objectives::
 
-      QP::Objectives objectives;
+      std::vector<QP::Objective> objectives;
       objectives.push_back(QP::Objective::Minimize(a + b + (a - b) * (a - b)));
       objectives.push_back(QP::Objective::Minimize(c + (b - c) * (b - c)));
 
 And constraints::
 
-      QP::Constraints constraints {
+      std::vector<QP::Constraint> constraints {
         a <= 1,
         c >= 4,
         a - 2 * b <= 12,
@@ -50,8 +50,7 @@ And constraints::
 
 Finally, solve::
 
-      QP::Problem problem(objectives, constraints);
-      problem.solve();
+      QP::solve(objectives, constraints);
 
       std::cout << "a: " << a.getValue() << std::endl;
       std::cout << "b: " << b.getValue() << std::endl;

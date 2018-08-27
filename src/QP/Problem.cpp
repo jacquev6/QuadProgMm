@@ -19,7 +19,7 @@
 
 namespace QP {
 
-Problem::Problem(const Objectives& objectives, const Constraints& constraints) :
+Problem::Problem(const std::vector<Objective>& objectives, const std::vector<Constraint>& constraints) :
   m_objectives(objectives),
   m_constraints(constraints),
   m_variables(),

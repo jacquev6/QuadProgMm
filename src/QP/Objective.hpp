@@ -26,8 +26,6 @@ private:
   QuadraticForm m_quadraticForm;
 };
 
-typedef std::vector<Objective> Objectives;
-
 } // Namespace
 
 #endif // Include guard

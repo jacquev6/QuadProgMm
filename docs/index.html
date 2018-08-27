@@ -61,13 +61,13 @@ and its <a class="reference external" href="https://github.com/jacquev6/QuadProg
 </pre></div>
 </div>
 <p>State objectives:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">Objectives</span> <span class="n">objectives</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">Objective</span><span class="o">&gt;</span> <span class="n">objectives</span><span class="p">;</span>
 <span class="n">objectives</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">QP</span><span class="p">::</span><span class="n">Objective</span><span class="p">::</span><span class="n">Minimize</span><span class="p">(</span><span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)));</span>
 <span class="n">objectives</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">QP</span><span class="p">::</span><span class="n">Objective</span><span class="p">::</span><span class="n">Minimize</span><span class="p">(</span><span class="n">c</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">)));</span>
 </pre></div>
 </div>
 <p>And constraints:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">Constraints</span> <span class="n">constraints</span> <span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">Constraint</span><span class="o">&gt;</span> <span class="n">constraints</span> <span class="p">{</span>
   <span class="n">a</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span>
   <span class="n">c</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">,</span>
   <span class="n">a</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">,</span>
@@ -75,8 +75,7 @@ and its <a class="reference external" href="https://github.com/jacquev6/QuadProg
 </pre></div>
 </div>
 <p>Finally, solve:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">QP</span><span class="p">::</span><span class="n">Problem</span> <span class="n">problem</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">constraints</span><span class="p">);</span>
-  <span class="n">problem</span><span class="o">.</span><span class="n">solve</span><span class="p">();</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">QP</span><span class="p">::</span><span class="n">solve</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">constraints</span><span class="p">);</span>
 
   <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;a: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
   <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;b: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">b</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>

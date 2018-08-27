@@ -12,12 +12,12 @@ namespace QP {
 
 class Problem {
 public:
-  Problem(const Objectives&, const Constraints& = Constraints());
+  Problem(const std::vector<Objective>&, const std::vector<Constraint>&);
   double solve() const;
 
 private:
-  Objectives m_objectives;
-  Constraints m_constraints;
+  std::vector<Objective> m_objectives;
+  std::vector<Constraint> m_constraints;
   typedef boost::bimap<Variable::ResolvablePtr, int> Variables;
   Variables m_variables;
   int m_equalityConstraints;

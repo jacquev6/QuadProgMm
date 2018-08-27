@@ -38,13 +38,13 @@ int main() {
   QP::Variable b("B");
   QP::Variable c("C");
 
-  QP::Objectives objectives;
+  std::vector<QP::Objective> objectives;
   objectives.push_back(QP::Objective::Value(a, 6));
   //objectives.push_back(QP::Objective::Value(b, -6));
   objectives.push_back(QP::Objective::Difference(b, a, 10));
   //objectives.push_back(QP::Objective::Minimize(a*a + b*b));
 
-  QP::Constraints constraints;
+  std::vector<QP::Constraint> constraints;
   //constraints.push_back(b - a >= 12);
   constraints.push_back(QP::Constraint::Difference(b, a, 9));
   //constraints.push_back(QP::Constraint::MaximumDifference(b, a, 9));

@@ -37,8 +37,6 @@ Constraint operator == (const LinearForm&, const LinearForm&);
 Constraint operator >= (const LinearForm&, const LinearForm&);
 Constraint operator <= (const LinearForm&, const LinearForm&);
 
-typedef std::vector<Constraint> Constraints;
-
 } // Namespace
 
 #endif // Include guard
