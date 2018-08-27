@@ -37,6 +37,10 @@ LinearForm Variable::operator - () const {
   return -LinearForm(m_resolvable);
 }
 
+LinearForm Variable::operator + () const {
+  return LinearForm(m_resolvable);
+}
+
 LinearForm operator + (const Variable& l, const Variable& r) {
   return LinearForm(l.m_resolvable) + LinearForm(r.m_resolvable);
 }

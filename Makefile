@@ -18,10 +18,10 @@ QuadProgpp/src/libquadprog.a:
 	git submodule update
 	(cd QuadProgpp; cmake .; make)
 
-post_doc: doc/user_guide/spring_chain_example.out doc/user_guide/quick_start.out
+post_doc: doc/spring_chain_example.out doc/quick_start.out doc/user_guide.out
 
-doc/user_guide/%.out: build/%.exe
+doc/%.out: build/%.exe
 	$^ >$@
 
-build/%.exe: doc/user_guide/artifacts/%.cpp build/libquadprogmm.a
+build/%.exe: doc/artifacts/%.cpp build/libquadprogmm.a
 	g++ -Isrc $^ QuadProgpp/src/libquadprog.a -o $@

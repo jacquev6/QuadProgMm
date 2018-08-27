@@ -30,13 +30,14 @@ public:
   QuadraticForm& operator +=(const QuadraticForm&);
   QuadraticForm& operator -=(const QuadraticForm&);
   QuadraticForm operator -() const;
+  QuadraticForm operator +() const;
   QuadraticForm& operator *=(double);
   QuadraticForm& operator /=(double);
 
 public:
   friend std::ostream& operator << (std::ostream&, const QuadraticForm&);
 
-public:
+public:  // @todo Why public?
   typedef std::pair<std::pair<VarPtr, VarPtr>, double> Coefficient;
   typedef std::map<std::pair<VarPtr, VarPtr>, double> Coefficients;
   const Coefficients& getCoefficients() const;

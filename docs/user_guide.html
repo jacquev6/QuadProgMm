@@ -16,7 +16,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Spring chain example" href="user_guide/spring_chain_example.html" />
+    <link rel="next" title="Spring chain example" href="spring_chain_example.html" />
     <link rel="prev" title="QuadProgMm" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -34,10 +34,68 @@
             
   <div class="section" id="user-guide">
 <h1>User guide<a class="headerlink" href="#user-guide" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="user_guide/spring_chain_example.html">Spring chain example</a></li>
-</ul>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<p>Quadratic problems aim at optimizing a quadratic form of several variables,
+subject to linear constraints on these variables.</p>
+<p>So, let’s start with variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">Variable</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>This defines four instances representing the variables of your QP problem.
+Solving your quadratic problem means finding values for these variables.
+Once the problem is solved, these values can be retrieved using <code class="docutils literal notranslate"><span class="pre">QP::Variable::getValue</span></code> (see below).</p>
+<p>It is your responsibility to ensure that variables are utlimately only used by a single call to <code class="docutils literal notranslate"><span class="pre">QP::solve</span></code>.
+&#64;todo Maybe change the interface so that this is ensured by the library.</p>
+<p>&#64;todo Variables have pointer semantics</p>
+</div>
+<div class="section" id="linear-and-quadratic-forms">
+<h2>Linear and quadratic forms<a class="headerlink" href="#linear-and-quadratic-forms" title="Permalink to this headline">¶</a></h2>
+<p>Variables can then be combined into linear forms using conventional operators and floating points:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">LinearForm</span> <span class="n">l</span> <span class="o">=</span> <span class="mf">3.5</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">-</span> <span class="n">c</span> <span class="o">/</span> <span class="mf">9.8</span> <span class="o">+</span> <span class="mi">12</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>All operators producing degree zero or one polynoms are available:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">LinearForm</span><span class="o">&gt;</span> <span class="n">all_linear_forms</span> <span class="p">{</span>
+  <span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span>
+  <span class="o">+</span><span class="n">a</span><span class="p">,</span> <span class="o">+</span><span class="n">l</span><span class="p">,</span> <span class="o">-</span><span class="n">a</span><span class="p">,</span> <span class="o">-</span><span class="n">l</span><span class="p">,</span>
+  <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="n">l</span><span class="p">,</span>
+  <span class="n">a</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">-</span> <span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">-</span> <span class="n">a</span><span class="p">,</span> <span class="n">l</span> <span class="o">-</span> <span class="n">l</span><span class="p">,</span>
+  <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="n">a</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">l</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Variables and linear forms can be combined into quadratic forms as well:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">QuadraticForm</span> <span class="n">q</span> <span class="o">=</span> <span class="mf">2.3</span> <span class="o">*</span> <span class="n">l</span> <span class="o">*</span> <span class="n">l</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">-</span> <span class="n">d</span> <span class="o">*</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">4</span><span class="p">;</span>
+
+<span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">QuadraticForm</span><span class="o">&gt;</span> <span class="n">all_quadratic_forms</span> <span class="p">{</span>
+  <span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span>
+  <span class="n">a</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="p">,</span>
+  <span class="o">+</span><span class="n">q</span><span class="p">,</span> <span class="o">-</span><span class="n">q</span><span class="p">,</span>
+  <span class="n">l</span> <span class="o">*</span> <span class="n">l</span><span class="p">,</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Oh, and linear and quadratic forms are actually mutable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">l</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">q</span> <span class="o">+=</span> <span class="n">l</span><span class="p">;</span>
+<span class="n">q</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="o">//</span> <span class="n">etc</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>&#64;todo Linear and quadratic forms have value semantics</p>
+</div>
+<div class="section" id="objectives-and-constraints">
+<h2>Objectives and constraints<a class="headerlink" href="#objectives-and-constraints" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="solving">
+<h2>Solving<a class="headerlink" href="#solving" title="Permalink to this headline">¶</a></h2>
+<p>Solve, cost</p>
+</div>
+<div class="section" id="degenerate-problems">
+<h2>Degenerate problems<a class="headerlink" href="#degenerate-problems" title="Permalink to this headline">¶</a></h2>
+<p>definite positive, or else…</p>
 </div>
 </div>
 
@@ -66,9 +124,15 @@
 <h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">User guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user_guide/spring_chain_example.html">Spring chain example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#variables">Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linear-and-quadratic-forms">Linear and quadratic forms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#objectives-and-constraints">Objectives and constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solving">Solving</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#degenerate-problems">Degenerate problems</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="spring_chain_example.html">Spring chain example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
 </ul>
 
 

@@ -1,0 +1,23 @@
+Linear and quadratic forms
+==========================
+
+Variables
+---------
+
+.. BEGIN SECTION linear_quadratic_forms.cpp
+..  #include <QP/QP.hpp>
+
+..  int main() {
+
+Quadratic problems aim at optimizing a quadratic form of several variables,
+subject to linear constraints on these variables.
+
+So, let's start with variables::
+
+    QP::Variable a, b, c, d;
+
+This defines four instances representing the variables of your QP problem.
+
+..  }
+
+.. END SECTION linear_quadratic_forms.cpp

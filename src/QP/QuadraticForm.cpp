@@ -79,4 +79,8 @@ QuadraticForm QuadraticForm::operator - () const {
   return l;
 }
 
+QuadraticForm QuadraticForm::operator + () const {
+  return QuadraticForm(*this);
+}
+
 } // Namespace

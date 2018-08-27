@@ -24,7 +24,7 @@ public:
   LinearForm(double);
   LinearForm(VarPtr);
 
-public:
+public: // @todo Why public?
   double getValue() const;
 
 public:
@@ -35,6 +35,7 @@ public:
 
 public:
   LinearForm operator - () const;
+  LinearForm operator + () const;
 
 public:
   typedef std::pair<VarPtr, double> Coefficient;

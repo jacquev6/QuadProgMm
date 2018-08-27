@@ -36,7 +36,7 @@ extensions.append("sphinx.ext.mathjax")
 # mathjax_path
 
 
-for input_file in ["../README.rst"] + glob.glob("user_guide/*.rst"):
+for input_file in ["../README.rst"] + glob.glob("*.rst"):
     with open(input_file) as in_f:
         seen = set()
         out_f = None
@@ -48,7 +48,7 @@ for input_file in ["../README.rst"] + glob.glob("user_guide/*.rst"):
                 out_f = None
                 output_file = None
             if out_f:
-                if any(line.startswith(prefix) for prefix in ["    ", "... ", ">>> "]):
+                if any(line.startswith(prefix) for prefix in ["    ", "..  "]):
                     out_f.write(line[4:])
                 elif line.strip() == "":
                     out_f.write("\n")
@@ -60,5 +60,5 @@ for input_file in ["../README.rst"] + glob.glob("user_guide/*.rst"):
                 else:
                     mode = "w"
                 seen.add(output_file)
-                out_f = open("user_guide/artifacts/{}".format(output_file), mode)
+                out_f = open("artifacts/{}".format(output_file), mode)
         assert output_file is None

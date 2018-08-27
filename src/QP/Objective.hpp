@@ -11,15 +11,16 @@ namespace QP {
 
 class Objective {
 public:
+  // @todo Simplify: remove weights
   static Objective Minimize(const QuadraticForm&, double weight = 1);
   static Objective Maximize(const QuadraticForm&, double weight = 1);
+  // @todo Remove?
   static Objective Value(const LinearForm&, double target, double weight = 1);
-  static Objective Difference(const LinearForm&, const LinearForm&, double target, double weight = 1);
 
 private:
   Objective(const QuadraticForm&);
 
-public:
+public:  // @todo Why public?
   const QuadraticForm& getQuadraticForm() const;
 
 private:

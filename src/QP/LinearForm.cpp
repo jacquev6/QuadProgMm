@@ -54,6 +54,10 @@ LinearForm LinearForm::operator - () const {
   return l;
 }
 
+LinearForm LinearForm::operator + () const {
+  return LinearForm(*this);
+}
+
 LinearForm operator - (double l, const LinearForm& r) {
   return -(r - l);
 }

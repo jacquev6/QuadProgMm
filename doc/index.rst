@@ -10,3 +10,5 @@ Contents
 .. toctree::
 
     user_guide
+    spring_chain_example
+    reference

@@ -28,9 +28,10 @@ public:
   friend std::ostream& operator << (std::ostream&, const Variable&);
 
 public:
-  operator LinearForm () const;
+  operator LinearForm () const; // @todo Could this implicit conversion be enough?
   operator QuadraticForm () const;
   LinearForm operator - () const;
+  LinearForm operator + () const;
 
   friend LinearForm operator + (const Variable&, double);
   friend LinearForm operator + (double, const Variable&);
@@ -47,7 +48,6 @@ public:
   friend QuadraticForm operator * (const Variable&, const Variable&);
 
 private:
-  std::string m_name; /// @todo Remove this variable
   ResolvablePtr m_resolvable;
 };
 
