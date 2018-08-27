@@ -47,8 +47,12 @@ and its <a class="reference external" href="https://github.com/jacquev6/QuadProg
 </div>
 <div class="section" id="quick-start">
 <h2>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
-<p>Build:</p>
-<p>(&#64;todo Add a real build system and document it here)</p>
+<p>Clone and build:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/jacquev6/QuadProgMm.git
+$ cd QuadProgMm
+$ make lib
+</pre></div>
+</div>
 <p>Start with Includes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;iostream&gt;</span>
 <span class="c1">#include &lt;QP/QP.hpp&gt;</span>
@@ -81,6 +85,11 @@ and its <a class="reference external" href="https://github.com/jacquev6/QuadProg
   <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;b: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">b</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
   <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;c: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">c</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
+</pre></div>
+</div>
+<p>Build and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ g++ quick_start.cpp path/to/QuadProgMm/build/libquadprogmm.a path/to/QuadProgMm/QuadProgpp/src/libquadprog.a -o quick_start
+$ ./quick_start
 </pre></div>
 </div>
 <p>Result:</p>

@@ -63,7 +63,7 @@ Finally, solve::
 
 Build and run::
 
-    $ g++ quick_start.cpp path/to/QuadProgMm/build/libquadprogmm.a path/to/QuadProgMm/QuadProgpp/src/libquadprog.a -o quick_start
+    $ g++ -Ipath/to/QuadProgMm/src quick_start.cpp path/to/QuadProgMm/build/libquadprogmm.a path/to/QuadProgMm/QuadProgpp/src/libquadprog.a -o quick_start
     $ ./quick_start
 
 Result::
