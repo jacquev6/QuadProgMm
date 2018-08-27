@@ -7,7 +7,7 @@ import sys
 import glob
 
 
-project = "Quad&shy;Prog&shy;Mm"
+project = "QuadProgMm"
 author = '<a href="http://vincent-jacques.net/">Vincent Jacques</a>'
 copyright = ('2010-2018 {} <script>var jacquev6_ribbon_github="{}"</script>'.format(author, project) +
              '<script src="https://jacquev6.github.io/ribbon.js"></script>')
