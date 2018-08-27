@@ -17,9 +17,11 @@ Questions? Remarks? Bugs? Want to contribute? `Open an issue <https://github.com
 Quick start
 ===========
 
-Build:
+Clone and build::
 
-(@todo Add a real build system and document it here)
+    $ git clone https://github.com/jacquev6/QuadProgMm.git
+    $ cd QuadProgMm
+    $ make lib
 
 .. BEGIN SECTION quick_start.cpp
 
@@ -58,6 +60,11 @@ Finally, solve::
     }
 
 .. END SECTION quick_start.cpp
+
+Build and run::
+
+    $ g++ quick_start.cpp path/to/QuadProgMm/build/libquadprogmm.a path/to/QuadProgMm/QuadProgpp/src/libquadprog.a -o quick_start
+    $ ./quick_start
 
 Result::
 

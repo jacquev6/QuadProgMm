@@ -28,18 +28,6 @@ do
   shift
 done
 
-
-if ! [ -f QuadProgpp/src/libquadprog.a ]
-then
-  git submodule init
-  git submodule update
-
-  cd QuadProgpp
-  cmake .
-  make
-  cd ..
-fi
-
 make lib
 
 sphinx-build doc docs

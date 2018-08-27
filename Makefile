@@ -6,13 +6,17 @@ build/depend: src/QP/*.cpp src/QP/*.hpp
 
 include build/depend
 
-build/%.o: src/QP/%.cpp
+build/%.o: src/QP/%.cpp QuadProgpp/src/libquadprog.a
 	@mkdir -p build
 	g++ -IQuadProgpp/src -c $< -o $@
 
 build/libquadprogmm.a: $(patsubst src/QP/%.cpp,build/%.o,$(wildcard src/QP/*.cpp))
 	ar rvs $@ $^
 
+QuadProgpp/src/libquadprog.a:
+	git submodule init
+	git submodule update
+	(cd QuadProgpp; cmake .; make)
 
 post_doc: doc/user_guide/spring_chain_example.out doc/user_guide/quick_start.out
 
