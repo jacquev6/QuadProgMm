@@ -2,7 +2,6 @@
 #define QP_QuadraticForm_hpp
 
 // Standard library
-#include <ostream>
 #include <map>
 
 // QP
@@ -33,9 +32,6 @@ public:
   QuadraticForm operator +() const;
   QuadraticForm& operator *=(double);
   QuadraticForm& operator /=(double);
-
-public:
-  friend std::ostream& operator << (std::ostream&, const QuadraticForm&);
 
 public:  // @todo Why public?
   typedef std::pair<std::pair<VarPtr, VarPtr>, double> Coefficient;

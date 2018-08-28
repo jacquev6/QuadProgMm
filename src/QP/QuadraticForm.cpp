@@ -37,14 +37,6 @@ const QuadraticForm::Coefficients& QuadraticForm::getCoefficients() const {
   return m_coefficients;
 }
 
-std::ostream& operator << (std::ostream& s, const QuadraticForm& q) {
-  foreach(QuadraticForm::Coefficient c, q.m_coefficients) {
-    s << c.second << "*" << *c.first.first << "*" << *c.first.second << " + ";
-  }
-  s << q.m_linearForm;
-  return s;
-}
-
 const LinearForm& QuadraticForm::getLinearForm() const {
   return m_linearForm;
 }

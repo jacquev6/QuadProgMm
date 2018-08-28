@@ -74,14 +74,6 @@ LinearForm& LinearForm::operator /= (double d) {
   return *this *= 1/d;
 }
 
-std::ostream& operator <<(std::ostream& s, const LinearForm& l) {
-  foreach(LinearForm::Coefficient c, l.m_coefficients) {
-    s <<c.second <<"*" <<*c.first <<" + ";
-  }
-  s <<l.m_const;
-  return s;
-}
-
 double LinearForm::getValue() const {
   double value = m_const;
   foreach(LinearForm::Coefficient c, m_coefficients) {

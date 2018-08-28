@@ -1,10 +1,6 @@
 #ifndef QP_Variable_hpp
 #define QP_Variable_hpp
 
-// Standard library
-#include <ostream>
-#include <string>
-
 // Boost
 #include <boost/shared_ptr.hpp>
 
@@ -15,7 +11,7 @@ class LinearForm;
 
 class Variable {
 public:
-  Variable(const std::string& name = "");
+  Variable();
 
 public:
   double getValue() const;
@@ -23,9 +19,6 @@ public:
 public:
   class Resolvable;
   typedef boost::shared_ptr<Resolvable> ResolvablePtr;
-
-public:
-  friend std::ostream& operator << (std::ostream&, const Variable&);
 
 public:
   operator LinearForm () const; // @todo Could this implicit conversion be enough?

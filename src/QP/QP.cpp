@@ -132,7 +132,6 @@ double Solver::solve() const {
 
   foreach(Objective o, m_objectives) {
     const QuadraticForm& q = o.getQuadraticForm();
-    //std::cout << q << std::endl;
     foreach(QuadraticForm::Coefficient c, q.getCoefficients()) {
       int v1 = m_variables.left.find(c.first.first)->second;
       int v2 = m_variables.left.find(c.first.second)->second;
@@ -166,8 +165,6 @@ double Solver::solve() const {
     C0[index] = l.getConstant();
     ++index;
   }
-
-  //std::cout << G << std::endl << G0 << std::endl;
 
   double cost = quadprogpp::solve_quadprog(G, G0, CE, CE0, CI, CI0, x);
 

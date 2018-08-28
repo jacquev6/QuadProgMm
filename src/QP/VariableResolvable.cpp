@@ -3,9 +3,8 @@
 
 namespace QP {
 
-Variable::Resolvable::Resolvable(const std::string& name) :
-  m_value(),
-  m_name(name)
+Variable::Resolvable::Resolvable() :
+  m_value()
 {
 }
 
@@ -19,11 +18,6 @@ bool Variable::Resolvable::isResolved() const {
 
 double Variable::Resolvable::getValue() const {
   return *m_value;
-}
-
-std::ostream& operator << (std::ostream& s, const Variable::Resolvable& v) {
-  s << v.m_name;
-  return s;
 }
 
 } // Namespace

@@ -43,9 +43,6 @@ public:
   const Coefficients& getCoefficients() const;
   double getConstant() const;
 
-public:
-  friend std::ostream& operator << (std::ostream&, const LinearForm&);
-
 private:
   Coefficients m_coefficients;
   double m_const;

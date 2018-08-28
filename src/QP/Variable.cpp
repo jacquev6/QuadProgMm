@@ -7,22 +7,13 @@
 
 namespace QP {
 
-Variable::Variable(const std::string& name) :
-  m_resolvable(new Resolvable(name))
+Variable::Variable() :
+  m_resolvable(new Resolvable())
 {
 }
 
 double Variable::getValue() const {
   return m_resolvable->getValue();
-}
-
-std::ostream& operator << (std::ostream& s, const Variable& variable) {
-  if(variable.m_resolvable->isResolved()) {
-    s << variable.m_resolvable->getValue();
-  } else {
-    s << "???";
-  }
-  return s;
 }
 
 Variable::operator LinearForm () const {
