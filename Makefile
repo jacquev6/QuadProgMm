@@ -11,7 +11,7 @@ build/%-test.ok: build/%-test.exe
 	$^
 	touch $@
 
-build/%-test.exe: src/QP/%-test.cc build/libquadprogmm.a
+build/%-test.exe: src/QP/%-test.cc build/libquadprogmm.a QuadProgpp/src/libquadprog.a
 	g++ -IQuadProgpp/src $^ -lboost_unit_test_framework -o $@
 
 
