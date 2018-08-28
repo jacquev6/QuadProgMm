@@ -5,32 +5,26 @@
 #include <vector>
 
 // QP
-#include "LinearForm.hpp"
+#include "Forms.hpp"
 
 namespace QP {
 
 class Constraint {
-public:
-  static Constraint Value(const LinearForm&, double value);
-  static Constraint MinimumValue(const LinearForm&, double value);
-  static Constraint MaximumValue(const LinearForm&, double value);
-  static Constraint Difference(const LinearForm&, const LinearForm&, double value);
-  static Constraint MinimumDifference(const LinearForm&, const LinearForm&, double value);
-  static Constraint MaximumDifference(const LinearForm&, const LinearForm&, double value);
+  public: // @todo Why public?
+    const LinearForm& getLinearForm() const;
+    bool isEquality() const;
 
-private:
-  friend Constraint operator == (const LinearForm&, const LinearForm&);
-  friend Constraint operator >= (const LinearForm&, const LinearForm&);
-  friend Constraint operator <= (const LinearForm&, const LinearForm&);
-  Constraint(const LinearForm&, bool isEquality);
+  private:
+    Constraint(const LinearForm&, bool isEquality);
 
-public:
-  const LinearForm& getLinearForm() const;
-  bool isEquality() const;
+  private:
+    friend Constraint operator == (const LinearForm&, const LinearForm&);
+    friend Constraint operator >= (const LinearForm&, const LinearForm&);
+    friend Constraint operator <= (const LinearForm&, const LinearForm&);
 
-private:
-  LinearForm m_linearForm;
-  bool m_isEquality;
+  private:
+    LinearForm m_linearForm;
+    bool m_isEquality;
 };
 
 Constraint operator == (const LinearForm&, const LinearForm&);

@@ -12,46 +12,31 @@
 #undef inverse
 #undef solve
 
-// QP
-#include "QuadraticForm.hpp"
-#include "Constraint.hpp"
-#include "VariableResolvable.hpp"
-
 namespace QP {
 
 class Objective {
   public:
-    // @todo Simplify: remove weights
-    static Objective Minimize(const QuadraticForm&, double weight = 1);
-    static Objective Maximize(const QuadraticForm&, double weight = 1);
-    // @todo Remove?
-    static Objective Value(const LinearForm&, double target, double weight = 1);
+    static Objective Minimize(const QuadraticForm&);
+    static Objective Maximize(const QuadraticForm&);
 
   private:
     Objective(const QuadraticForm&);
 
-  public:  // @todo Why public?
+  public:
     const QuadraticForm& getQuadraticForm() const;
 
   private:
     QuadraticForm m_quadraticForm;
 };
 
-Objective::Objective(const QuadraticForm& q) :
-  m_quadraticForm(q)
-{
+Objective::Objective(const QuadraticForm& q) : m_quadraticForm(q) {}
+
+Objective Objective::Minimize(const QuadraticForm& q) {
+  return Objective(q);
 }
 
-Objective Objective::Minimize(const QuadraticForm& q, double weight) {
-  return Objective(weight * q);
-}
-
-Objective Objective::Maximize(const QuadraticForm& q, double weight) {
-  return Objective(-weight * q);
-}
-
-Objective Objective::Value(const LinearForm& v, double target, double weight) {
-  return Minimize((v - target) * (v - target), weight);
+Objective Objective::Maximize(const QuadraticForm& q) {
+  return Objective(-q);
 }
 
 const QuadraticForm& Objective::getQuadraticForm() const {

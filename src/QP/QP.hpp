@@ -1,7 +1,6 @@
 #ifndef QP_QP_hpp
 #define QP_QP_hpp
 
-#include "QuadraticForm.hpp"
 #include "Constraint.hpp"
 
 namespace QP {

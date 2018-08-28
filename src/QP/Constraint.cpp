@@ -21,30 +21,6 @@ Constraint operator <= (const LinearForm& l, const LinearForm& r) {
   return Constraint(r - l, false);
 }
 
-Constraint Constraint::Value(const LinearForm& l, double value) {
-  return l == value;
-}
-
-Constraint Constraint::MinimumValue(const LinearForm& l, double value) {
-  return l >= value;
-}
-
-Constraint Constraint::MaximumValue(const LinearForm& l, double value) {
-  return l <= value;
-}
-
-Constraint Constraint::Difference(const LinearForm& l, const LinearForm& r, double value) {
-  return l - r == value;
-}
-
-Constraint Constraint::MinimumDifference(const LinearForm& l, const LinearForm& r, double value) {
-  return l - r >= value;
-}
-
-Constraint Constraint::MaximumDifference(const LinearForm& l, const LinearForm& r, double value) {
-  return l - r <= value;
-}
-
 const LinearForm& Constraint::getLinearForm() const {
   return m_linearForm;
 }
