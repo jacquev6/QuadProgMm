@@ -1,7 +1,7 @@
 #ifndef QP_QP_hpp
 #define QP_QP_hpp
 
-#include "Constraint.hpp"
+#include "Forms.hpp"
 
 namespace QP {
 
