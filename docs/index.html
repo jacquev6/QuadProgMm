@@ -79,11 +79,12 @@ $ make lib
 </pre></div>
 </div>
 <p>Finally, solve:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">QP</span><span class="p">::</span><span class="n">solve</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">constraints</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">QP</span><span class="p">::</span><span class="n">Solution</span> <span class="n">solution</span> <span class="o">=</span> <span class="n">QP</span><span class="p">::</span><span class="n">solve</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">constraints</span><span class="p">);</span>
 
-  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;a: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">a</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
-  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;b: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">b</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
-  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;c: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">c</span><span class="o">.</span><span class="n">getValue</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;a: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;b: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;c: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;Cost: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">getCost</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -96,6 +97,7 @@ $ ./quick_start
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">:</span> <span class="mi">1</span>
 <span class="n">b</span><span class="p">:</span> <span class="mi">2</span>
 <span class="n">c</span><span class="p">:</span> <span class="mi">4</span>
+<span class="n">Cost</span><span class="p">:</span> <span class="mi">16</span>
 </pre></div>
 </div>
 </div>

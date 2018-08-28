@@ -52,11 +52,12 @@ And constraints::
 
 Finally, solve::
 
-      QP::solve(objectives, constraints);
+      QP::Solution solution = QP::solve(objectives, constraints);
 
-      std::cout << "a: " << a.getValue() << std::endl;
-      std::cout << "b: " << b.getValue() << std::endl;
-      std::cout << "c: " << c.getValue() << std::endl;
+      std::cout << "a: " << solution.get(a) << std::endl;
+      std::cout << "b: " << solution.get(b) << std::endl;
+      std::cout << "c: " << solution.get(c) << std::endl;
+      std::cout << "Cost: " << solution.getCost() << std::endl;
     }
 
 .. END SECTION quick_start.cpp
@@ -71,3 +72,4 @@ Result::
     a: 1
     b: 2
     c: 4
+    Cost: 16

@@ -64,13 +64,13 @@ a vector of <code class="docutils literal notranslate"><span class="pre">Spring<
   <span class="p">)</span> <span class="p">:</span>
     <span class="n">left</span><span class="p">(</span><span class="n">left_</span><span class="p">),</span> <span class="n">right</span><span class="p">(</span><span class="n">right_</span><span class="p">),</span>
     <span class="n">springs</span><span class="p">(</span><span class="n">springs_</span><span class="p">),</span>
-    <span class="n">positions</span><span class="p">(</span><span class="n">makePositions</span><span class="p">(</span><span class="n">springs_</span><span class="p">))</span>
+    <span class="n">positions</span><span class="p">(</span><span class="n">makePositions</span><span class="p">(</span><span class="n">springs_</span><span class="p">)),</span>
+    <span class="n">solution</span><span class="p">(</span><span class="n">resolve</span><span class="p">())</span>
   <span class="p">{</span>
-    <span class="n">resolve</span><span class="p">();</span>
   <span class="p">}</span>
 
   <span class="nb">float</span> <span class="n">get</span><span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="p">)</span> <span class="n">const</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">getValue</span><span class="p">();</span>
+    <span class="k">return</span> <span class="n">solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
   <span class="p">}</span>
 
 <span class="n">private</span><span class="p">:</span>
@@ -84,12 +84,13 @@ a vector of <code class="docutils literal notranslate"><span class="pre">Spring<
     <span class="k">return</span> <span class="n">positions</span><span class="p">;</span>
   <span class="p">}</span>
 
-  <span class="n">void</span> <span class="n">resolve</span><span class="p">();</span>
+  <span class="n">QP</span><span class="p">::</span><span class="n">Solution</span> <span class="n">resolve</span><span class="p">();</span>
 
 <span class="n">private</span><span class="p">:</span>
   <span class="nb">float</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">;</span>
   <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Spring</span><span class="o">&gt;</span> <span class="n">springs</span><span class="p">;</span>
   <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">Variable</span><span class="o">&gt;</span> <span class="n">positions</span><span class="p">;</span>
+  <span class="n">QP</span><span class="p">::</span><span class="n">Solution</span> <span class="n">solution</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
 </div>
@@ -97,7 +98,7 @@ a vector of <code class="docutils literal notranslate"><span class="pre">Spring<
 when a <code class="docutils literal notranslate"><span class="pre">QP::Variable</span></code> is copied, the copy refers to the same resolvable entity as the original.
 That’s why an original <code class="docutils literal notranslate"><span class="pre">QP::Variable</span></code> instance is required for each position to compute.</p>
 <p>Then, the most important part: the definition of <code class="docutils literal notranslate"><span class="pre">SpringChain::resolve</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">SpringChain</span><span class="p">::</span><span class="n">resolve</span><span class="p">()</span> <span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">Solution</span> <span class="n">SpringChain</span><span class="p">::</span><span class="n">resolve</span><span class="p">()</span> <span class="p">{</span>
 </pre></div>
 </div>
 <p>First,
@@ -128,7 +129,7 @@ So, fill a <code class="docutils literal notranslate"><span class="pre">std::vec
 </pre></div>
 </div>
 <p>And solve the QP problem:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">QP</span><span class="p">::</span><span class="n">solve</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">constraints</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="k">return</span> <span class="n">QP</span><span class="p">::</span><span class="n">solve</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">constraints</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>

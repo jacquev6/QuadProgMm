@@ -179,8 +179,8 @@ double Solver::solve() const {
   return cost + baseCost;
 }
 
-double solve(const std::vector<Objective>& objectives, const std::vector<Constraint>& constraints) {
-  return Solver(objectives, constraints).solve();
+Solution solve(const std::vector<Objective>& objectives, const std::vector<Constraint>& constraints) {
+  return Solution(Solver(objectives, constraints).solve());
 }
 
 } // Namespace

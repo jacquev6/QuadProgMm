@@ -38,13 +38,13 @@ a vector of ``Spring``, and a vector of ``QP::Variable`` for the positions to be
       ) :
         left(left_), right(right_),
         springs(springs_),
-        positions(makePositions(springs_))
+        positions(makePositions(springs_)),
+        solution(resolve())
       {
-        resolve();
       }
 
       float get(size_t i) const {
-        return positions[i].getValue();
+        return solution.get(positions[i]);
       }
 
     private:
@@ -58,12 +58,13 @@ a vector of ``Spring``, and a vector of ``QP::Variable`` for the positions to be
         return positions;
       }
 
-      void resolve();
+      QP::Solution resolve();
 
     private:
       float left, right;
       std::vector<Spring> springs;
       std::vector<QP::Variable> positions;
+      QP::Solution solution;
     };
 
 ``makePositions`` is required because ``QP::Variable`` has a pointer semantic:
@@ -72,7 +73,7 @@ That's why an original ``QP::Variable`` instance is required for each position t
 
 Then, the most important part: the definition of ``SpringChain::resolve``::
 
-    void SpringChain::resolve() {
+    QP::Solution SpringChain::resolve() {
 
 First,
 define the objectives:
@@ -103,7 +104,7 @@ Add the constraints on boundaries::
 
 And solve the QP problem::
 
-      QP::solve(objectives, constraints);
+      return QP::solve(objectives, constraints);
     }
 
 Finally, use the ``SpringChain`` class::

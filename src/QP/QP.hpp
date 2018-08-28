@@ -6,7 +6,19 @@
 
 namespace QP {
 
-double solve(const std::vector<Objective>&, const std::vector<Constraint>& = std::vector<Constraint>());
+class Solution {
+  public:
+    double getCost() const {return cost;}
+    double get(const Variable& v) const {return v.getValue();}
+
+  public:
+    Solution(double cost_) : cost(cost_) {}
+
+  private:
+    const double cost;
+};
+
+Solution solve(const std::vector<Objective>&, const std::vector<Constraint>& = std::vector<Constraint>());
 
 } // Namespace
 
