@@ -20,17 +20,17 @@
 namespace QP {
 
 class Solver {
-public:
-  Solver(const std::vector<Objective>&, const std::vector<Constraint>&);
-  double solve() const;
+  public:
+    Solver(const std::vector<Objective>&, const std::vector<Constraint>&);
+    double solve() const;
 
-private:
-  std::vector<Objective> m_objectives;
-  std::vector<Constraint> m_constraints;
-  typedef boost::bimap<Variable::ResolvablePtr, int> Variables;
-  Variables m_variables;
-  int m_equalityConstraints;
-  int m_inequalityConstraints;
+  private:
+    std::vector<Objective> m_objectives;
+    std::vector<Constraint> m_constraints;
+    typedef boost::bimap<Variable::ResolvablePtr, int> Variables;
+    Variables m_variables;
+    int m_equalityConstraints;
+    int m_inequalityConstraints;
 };
 
 Solver::Solver(const std::vector<Objective>& objectives, const std::vector<Constraint>& constraints) :
@@ -178,6 +178,14 @@ double Solver::solve() const {
 
 Solution solve(const std::vector<Objective>& objectives, const std::vector<Constraint>& constraints) {
   return Solution(Solver(objectives, constraints).solve());
+}
+
+Solution minimize(const QuadraticForm& q, const std::vector<Constraint>& constraints) {
+  return solve({Objective::Minimize(q)}, constraints);
+}
+
+Solution maximize(const QuadraticForm& q, const std::vector<Constraint>& constraints) {
+  return solve({Objective::Maximize(q)}, constraints);
 }
 
 } // Namespace

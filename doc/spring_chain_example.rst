@@ -75,36 +75,30 @@ Then, the most important part: the definition of ``SpringChain::resolve``::
 
     QP::Solution SpringChain::resolve() {
 
-First,
-define the objectives:
-each spring has a `potential energy <https://en.wikipedia.org/wiki/Elastic_energy>`_
-of \\(1/2 \\cdot k \\cdot (l - l_0) ^ 2\\),
+First, define the objective: each spring has a `potential energy <https://en.wikipedia.org/wiki/Elastic_energy>`_ of \\(1/2 \\cdot k \\cdot (l - l_0) ^ 2\\),
 where \\(k\\) is its strength, \\(l_0\\) is its unconstrained length, and \\(l\\) is its current length.
-The balance position is reached when the total energy is minimal:
-the objective is to minimize the sum of all those energies.
-So, fill a ``std::vector<QP::Objective>`` with one objective per spring::
+The balance position is reached when the total energy is minimal: the objective is to minimize the sum of all those energies.
+So, build the total energy as a quadratic form of the variables::
 
-      std::vector<QP::Objective> objectives;
+      QP::QuadraticForm energy = 0;
       for(size_t i = 0; i != springs.size(); ++i) {
         QP::LinearForm l_minus_l0 =
           positions[i + 1] - positions[i]
           - springs[i].length;
 
-        objectives.push_back(QP::Objective::Minimize(
-          0.5 * springs[i].strength * l_minus_l0 * l_minus_l0
-        ));
+        energy += 0.5 * springs[i].strength * l_minus_l0 * l_minus_l0;
       }
 
 Add the constraints on boundaries::
 
-      std::vector<QP::Constraint> constraints {
+      std::vector<QP::Constraint> boundaries {
         positions.front() == left,
         positions.back() == right,
       };
 
 And solve the QP problem::
 
-      return QP::solve(objectives, constraints);
+      return QP::minimize(energy, boundaries);
     }
 
 Finally, use the ``SpringChain`` class::

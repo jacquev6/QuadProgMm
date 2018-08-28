@@ -1,7 +1,7 @@
 #ifndef QP_QP_hpp
 #define QP_QP_hpp
 
-#include "Objective.hpp"
+#include "QuadraticForm.hpp"
 #include "Constraint.hpp"
 
 namespace QP {
@@ -18,7 +18,9 @@ class Solution {
     const double cost;
 };
 
-Solution solve(const std::vector<Objective>&, const std::vector<Constraint>& = std::vector<Constraint>());
+Solution minimize(const QuadraticForm&, const std::vector<Constraint>& = std::vector<Constraint>());
+
+Solution maximize(const QuadraticForm&, const std::vector<Constraint>& = std::vector<Constraint>());
 
 } // Namespace
 

@@ -101,35 +101,29 @@ That’s why an original <code class="docutils literal notranslate"><span class=
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">Solution</span> <span class="n">SpringChain</span><span class="p">::</span><span class="n">resolve</span><span class="p">()</span> <span class="p">{</span>
 </pre></div>
 </div>
-<p>First,
-define the objectives:
-each spring has a <a class="reference external" href="https://en.wikipedia.org/wiki/Elastic_energy">potential energy</a>
-of \(1/2 \cdot k \cdot (l - l_0) ^ 2\),
+<p>First, define the objective: each spring has a <a class="reference external" href="https://en.wikipedia.org/wiki/Elastic_energy">potential energy</a> of \(1/2 \cdot k \cdot (l - l_0) ^ 2\),
 where \(k\) is its strength, \(l_0\) is its unconstrained length, and \(l\) is its current length.
-The balance position is reached when the total energy is minimal:
-the objective is to minimize the sum of all those energies.
-So, fill a <code class="docutils literal notranslate"><span class="pre">std::vector&lt;QP::Objective&gt;</span></code> with one objective per spring:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">Objective</span><span class="o">&gt;</span> <span class="n">objectives</span><span class="p">;</span>
+The balance position is reached when the total energy is minimal: the objective is to minimize the sum of all those energies.
+So, build the total energy as a quadratic form of the variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">QuadraticForm</span> <span class="n">energy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="k">for</span><span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">springs</span><span class="o">.</span><span class="n">size</span><span class="p">();</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
   <span class="n">QP</span><span class="p">::</span><span class="n">LinearForm</span> <span class="n">l_minus_l0</span> <span class="o">=</span>
     <span class="n">positions</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="o">-</span> <span class="n">springs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">length</span><span class="p">;</span>
 
-  <span class="n">objectives</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">QP</span><span class="p">::</span><span class="n">Objective</span><span class="p">::</span><span class="n">Minimize</span><span class="p">(</span>
-    <span class="mf">0.5</span> <span class="o">*</span> <span class="n">springs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strength</span> <span class="o">*</span> <span class="n">l_minus_l0</span> <span class="o">*</span> <span class="n">l_minus_l0</span>
-  <span class="p">));</span>
+  <span class="n">energy</span> <span class="o">+=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">springs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">strength</span> <span class="o">*</span> <span class="n">l_minus_l0</span> <span class="o">*</span> <span class="n">l_minus_l0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>Add the constraints on boundaries:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">Constraint</span><span class="o">&gt;</span> <span class="n">constraints</span> <span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">Constraint</span><span class="o">&gt;</span> <span class="n">boundaries</span> <span class="p">{</span>
   <span class="n">positions</span><span class="o">.</span><span class="n">front</span><span class="p">()</span> <span class="o">==</span> <span class="n">left</span><span class="p">,</span>
   <span class="n">positions</span><span class="o">.</span><span class="n">back</span><span class="p">()</span> <span class="o">==</span> <span class="n">right</span><span class="p">,</span>
 <span class="p">};</span>
 </pre></div>
 </div>
 <p>And solve the QP problem:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="k">return</span> <span class="n">QP</span><span class="p">::</span><span class="n">solve</span><span class="p">(</span><span class="n">objectives</span><span class="p">,</span> <span class="n">constraints</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="k">return</span> <span class="n">QP</span><span class="p">::</span><span class="n">minimize</span><span class="p">(</span><span class="n">energy</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>

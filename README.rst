@@ -36,11 +36,9 @@ Create variables::
 
       QP::Variable a, b, c;
 
-State objectives::
+And a quadratic form to optimize::
 
-      std::vector<QP::Objective> objectives;
-      objectives.push_back(QP::Objective::Minimize(a + b + (a - b) * (a - b)));
-      objectives.push_back(QP::Objective::Minimize(c + (b - c) * (b - c)));
+      QP::QuadraticForm q = a + b + (a - b) * (a - b) + c + (b - c) * (b - c);
 
 And constraints::
 
@@ -52,7 +50,7 @@ And constraints::
 
 Finally, solve::
 
-      QP::Solution solution = QP::solve(objectives, constraints);
+      QP::Solution solution = QP::minimize(q, constraints);
 
       std::cout << "a: " << solution.get(a) << std::endl;
       std::cout << "b: " << solution.get(b) << std::endl;
