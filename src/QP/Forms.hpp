@@ -76,9 +76,6 @@ class LinearForm :
     LinearForm(double);
     LinearForm(VarPtr);
 
-  public: // @todo Why public?
-    double getValue() const;
-
   public:
     LinearForm& operator *= (double);
     LinearForm& operator /= (double);
@@ -114,9 +111,6 @@ class QuadraticForm :
     QuadraticForm(double);
     QuadraticForm(const LinearForm&);
     QuadraticForm(const LinearForm& a, const LinearForm& b);
-
-  public:
-    double getValue() const;
 
   public:
     QuadraticForm& operator +=(const QuadraticForm&);

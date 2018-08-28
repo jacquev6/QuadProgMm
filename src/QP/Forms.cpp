@@ -152,14 +152,6 @@ LinearForm& LinearForm::operator /= (double d) {
   return *this *= 1/d;
 }
 
-double LinearForm::getValue() const {
-  double value = m_const;
-  foreach(LinearForm::Coefficient c, m_coefficients) {
-    value += c.second * c.first->getValue();
-  }
-  return value;
-}
-
 QuadraticForm::QuadraticForm(const LinearForm& l) :
   m_linearForm(l),
   m_coefficients()
