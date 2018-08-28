@@ -52,9 +52,9 @@ Finally, solve::
 
       QP::Solution solution = QP::minimize(q, constraints);
 
-      std::cout << "a: " << solution.get(a) << std::endl;
-      std::cout << "b: " << solution.get(b) << std::endl;
-      std::cout << "c: " << solution.get(c) << std::endl;
+      std::cout << "a: " << *solution.get(a) << std::endl;
+      std::cout << "b: " << *solution.get(b) << std::endl;
+      std::cout << "c: " << *solution.get(c) << std::endl;
       std::cout << "Cost: " << solution.getCost() << std::endl;
     }
 

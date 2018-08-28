@@ -43,8 +43,8 @@ a vector of ``Spring``, and a vector of ``QP::Variable`` for the positions to be
       {
       }
 
-      float get(size_t i) const {
-        return solution.get(positions[i]);
+      double get(size_t i) const {
+        return *solution.get(positions[i]);
       }
 
     private:

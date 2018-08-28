@@ -69,8 +69,8 @@ a vector of <code class="docutils literal notranslate"><span class="pre">Spring<
   <span class="p">{</span>
   <span class="p">}</span>
 
-  <span class="nb">float</span> <span class="n">get</span><span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="p">)</span> <span class="n">const</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+  <span class="n">double</span> <span class="n">get</span><span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="p">)</span> <span class="n">const</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="o">*</span><span class="n">solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
   <span class="p">}</span>
 
 <span class="n">private</span><span class="p">:</span>

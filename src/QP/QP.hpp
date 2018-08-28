@@ -1,15 +1,27 @@
 #ifndef QP_QP_hpp
 #define QP_QP_hpp
 
+// Boost
+#include <boost/optional.hpp>
+
+// QP
 #include "Forms.hpp"
 
 namespace QP {
 
 class Solution {
   public:
-    double getCost() const {return cost;}
-    double get(const Variable& v) const {
-      return values.find(v.id)->second; // @todo Don't dereference values.end()
+    double getCost() const {
+      return cost;
+    }
+
+    boost::optional<double> get(const Variable& v) const {
+      const std::map<int, double>::const_iterator it = values.find(v.id);
+      if (it == values.end()) {
+        return boost::optional<double>();
+      } else {
+        return it->second;
+      }
     }
 
   public:
