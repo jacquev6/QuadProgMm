@@ -16,6 +16,8 @@ class QuadraticForm;
 class LinearForm;
 
 class Variable {
+  friend class LinearForm;
+
   public:
     Variable();
 
@@ -27,7 +29,6 @@ class Variable {
     typedef boost::shared_ptr<Resolvable> ResolvablePtr;
 
   public:
-    operator LinearForm () const; // @todo Could this implicit conversion be enough?
     operator QuadraticForm () const;
     LinearForm operator - () const;
     LinearForm operator + () const;
@@ -70,11 +71,9 @@ class LinearForm :
   boost::multipliable2<LinearForm, double>,
   boost::dividable2<LinearForm, double>
 {
-  typedef Variable::ResolvablePtr VarPtr;
-
   public:
     LinearForm(double);
-    LinearForm(VarPtr);
+    LinearForm(const Variable&);
 
   public:
     LinearForm& operator *= (double);
@@ -87,8 +86,8 @@ class LinearForm :
     LinearForm operator + () const;
 
   public:
-    typedef std::pair<VarPtr, double> Coefficient;
-    typedef std::map<VarPtr, double> Coefficients;
+    typedef std::pair<Variable::ResolvablePtr, double> Coefficient;
+    typedef std::map<Variable::ResolvablePtr, double> Coefficients;
     const Coefficients& getCoefficients() const;
     double getConstant() const;
 
@@ -105,8 +104,6 @@ class QuadraticForm :
   boost::multipliable2<QuadraticForm, double>,
   boost::dividable2<QuadraticForm, double>
 {
-  typedef Variable::ResolvablePtr VarPtr;
-
   public:
     QuadraticForm(double);
     QuadraticForm(const LinearForm&);
@@ -121,8 +118,8 @@ class QuadraticForm :
     QuadraticForm& operator /=(double);
 
   public:  // @todo Why public?
-    typedef std::pair<std::pair<VarPtr, VarPtr>, double> Coefficient;
-    typedef std::map<std::pair<VarPtr, VarPtr>, double> Coefficients;
+    typedef std::pair<std::pair<Variable::ResolvablePtr, Variable::ResolvablePtr>, double> Coefficient;
+    typedef std::map<std::pair<Variable::ResolvablePtr, Variable::ResolvablePtr>, double> Coefficients;
     const Coefficients& getCoefficients() const;
     const LinearForm& getLinearForm() const;
 

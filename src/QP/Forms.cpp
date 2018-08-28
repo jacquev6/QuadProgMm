@@ -16,60 +16,56 @@ double Variable::getValue() const {
   return m_resolvable->getValue();
 }
 
-Variable::operator LinearForm () const {
-  return LinearForm(m_resolvable);
-}
-
 Variable::operator QuadraticForm () const {
-  return QuadraticForm(LinearForm(m_resolvable));
+  return QuadraticForm(LinearForm(*this));
 }
 
 LinearForm Variable::operator - () const {
-  return -LinearForm(m_resolvable);
+  return -LinearForm(*this);
 }
 
 LinearForm Variable::operator + () const {
-  return LinearForm(m_resolvable);
+  return LinearForm(*this);
 }
 
 LinearForm operator + (const Variable& l, const Variable& r) {
-  return LinearForm(l.m_resolvable) + LinearForm(r.m_resolvable);
+  return LinearForm(l) + LinearForm(r);
 }
 
 LinearForm operator + (const Variable& l, double r) {
-  return LinearForm(l.m_resolvable) + r;
+  return LinearForm(l) + r;
 }
 
 LinearForm operator + (double l, const Variable& r) {
-  return l + LinearForm(r.m_resolvable);
+  return l + LinearForm(r);
 }
 
 LinearForm operator - (const Variable& l, const Variable& r) {
-  return LinearForm(l.m_resolvable) - LinearForm(r.m_resolvable);
+  return LinearForm(l) - LinearForm(r);
 }
 
 LinearForm operator - (const Variable& l, double r) {
-  return LinearForm(l.m_resolvable) - r;
+  return LinearForm(l) - r;
 }
 
 LinearForm operator - (double l, const Variable& r) {
-  return l - LinearForm(r.m_resolvable);
+  return l - LinearForm(r);
 }
 
 QuadraticForm operator * (const Variable& l, const Variable& r) {
-  return QuadraticForm(l.m_resolvable, r.m_resolvable);
+  return QuadraticForm(l, r);
 }
 
 LinearForm operator * (const Variable& l, double r) {
-  return LinearForm(l.m_resolvable) * r;
+  return LinearForm(l) * r;
 }
 
 LinearForm operator / (const Variable& l, double r) {
-  return LinearForm(l.m_resolvable) / r;
+  return LinearForm(l) / r;
 }
 
 LinearForm operator * (double l, const Variable& r) {
-  return l * LinearForm(r.m_resolvable);
+  return l * LinearForm(r);
 }
 
 Variable::Resolvable::Resolvable() :
@@ -89,11 +85,11 @@ double Variable::Resolvable::getValue() const {
   return *m_value;
 }
 
-LinearForm::LinearForm(VarPtr v) :
+LinearForm::LinearForm(const Variable& v) :
   m_coefficients(),
   m_const(0)
 {
-  m_coefficients[v] = 1;
+  m_coefficients[v.m_resolvable] = 1;
 }
 
 LinearForm::LinearForm(double d) :
