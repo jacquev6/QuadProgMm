@@ -13,11 +13,50 @@
 #undef solve
 
 // QP
-#include "Objective.hpp"
+#include "QuadraticForm.hpp"
 #include "Constraint.hpp"
 #include "VariableResolvable.hpp"
 
 namespace QP {
+
+class Objective {
+  public:
+    // @todo Simplify: remove weights
+    static Objective Minimize(const QuadraticForm&, double weight = 1);
+    static Objective Maximize(const QuadraticForm&, double weight = 1);
+    // @todo Remove?
+    static Objective Value(const LinearForm&, double target, double weight = 1);
+
+  private:
+    Objective(const QuadraticForm&);
+
+  public:  // @todo Why public?
+    const QuadraticForm& getQuadraticForm() const;
+
+  private:
+    QuadraticForm m_quadraticForm;
+};
+
+Objective::Objective(const QuadraticForm& q) :
+  m_quadraticForm(q)
+{
+}
+
+Objective Objective::Minimize(const QuadraticForm& q, double weight) {
+  return Objective(weight * q);
+}
+
+Objective Objective::Maximize(const QuadraticForm& q, double weight) {
+  return Objective(-weight * q);
+}
+
+Objective Objective::Value(const LinearForm& v, double target, double weight) {
+  return Minimize((v - target) * (v - target), weight);
+}
+
+const QuadraticForm& Objective::getQuadraticForm() const {
+  return m_quadraticForm;
+}
 
 class Solver {
   public:
