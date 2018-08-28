@@ -28,7 +28,7 @@ do
   shift
 done
 
-make lib
+make tst
 
 sphinx-build doc docs
 
