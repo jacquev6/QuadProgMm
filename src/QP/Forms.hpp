@@ -11,22 +11,16 @@
 #include <boost/shared_ptr.hpp>
 
 namespace QP {
-
 class QuadraticForm;
 class LinearForm;
+class Solution;
 
 class Variable {
   friend class LinearForm;
+  friend class Solution;
 
   public:
     Variable();
-
-  public:
-    double getValue() const;
-
-  public:
-    class Resolvable;
-    typedef boost::shared_ptr<Resolvable> ResolvablePtr;
 
   public:
     operator QuadraticForm () const;
@@ -48,21 +42,8 @@ class Variable {
     friend QuadraticForm operator * (const Variable&, const Variable&);
 
   private:
-    ResolvablePtr m_resolvable;
-};
-
-class Variable::Resolvable {
-  public:
-    Resolvable();
-    Resolvable(const Resolvable&);
-
-  public:
-    void setValue(double value);
-    bool isResolved() const;
-    double getValue() const;
-
-  private:
-    boost::optional<double> m_value;
+    const int id;
+    static int nextId;
 };
 
 class LinearForm :
@@ -86,8 +67,8 @@ class LinearForm :
     LinearForm operator + () const;
 
   public:
-    typedef std::pair<Variable::ResolvablePtr, double> Coefficient;
-    typedef std::map<Variable::ResolvablePtr, double> Coefficients;
+    typedef std::pair<int, double> Coefficient;
+    typedef std::map<int, double> Coefficients;
     const Coefficients& getCoefficients() const;
     double getConstant() const;
 
@@ -118,8 +99,8 @@ class QuadraticForm :
     QuadraticForm& operator /=(double);
 
   public:  // @todo Why public?
-    typedef std::pair<std::pair<Variable::ResolvablePtr, Variable::ResolvablePtr>, double> Coefficient;
-    typedef std::map<std::pair<Variable::ResolvablePtr, Variable::ResolvablePtr>, double> Coefficients;
+    typedef std::pair<std::pair<int, int>, double> Coefficient;
+    typedef std::map<std::pair<int, int>, double> Coefficients;
     const Coefficients& getCoefficients() const;
     const LinearForm& getLinearForm() const;
 

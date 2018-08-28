@@ -17,12 +17,13 @@ Solution minimize(const QuadraticForm& q, const std::vector<Constraint>& constra
 
   double cost = quadprogpp::solve_quadprog(t.G, t.G0, t.CE, t.CE0, t.CI, t.CI0, x);
 
+  std::map<int, double> values;
   for(int i = 0; i < t.n; ++i) {
     assert(t.variables.right.find(i) != t.variables.right.end());
-    t.variables.right.find(i)->second->setValue(x[i]);
+    values[t.variables.right.find(i)->second] = x[i];
   }
 
-  return Solution(cost + t.baseCost);
+  return Solution(cost + t.baseCost, values);
 }
 
 Solution maximize(const QuadraticForm& q, const std::vector<Constraint>& constraints) {

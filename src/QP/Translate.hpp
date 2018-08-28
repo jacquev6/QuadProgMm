@@ -15,7 +15,7 @@
 
 namespace QP {
 
-typedef boost::bimap<Variable::ResolvablePtr, int> Variables;
+typedef boost::bimap<int, int> Variables;
 
 struct Translation {
   /* From QuadProg++:

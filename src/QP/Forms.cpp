@@ -7,14 +7,9 @@
 
 namespace QP {
 
-Variable::Variable() :
-  m_resolvable(new Resolvable())
-{
-}
+int Variable::nextId = 0;
 
-double Variable::getValue() const {
-  return m_resolvable->getValue();
-}
+Variable::Variable() : id(++nextId) {}
 
 Variable::operator QuadraticForm () const {
   return QuadraticForm(LinearForm(*this));
@@ -68,28 +63,11 @@ LinearForm operator * (double l, const Variable& r) {
   return l * LinearForm(r);
 }
 
-Variable::Resolvable::Resolvable() :
-  m_value()
-{
-}
-
-void Variable::Resolvable::setValue(double value) {
-  m_value = value;
-}
-
-bool Variable::Resolvable::isResolved() const {
-  return (bool)m_value;
-}
-
-double Variable::Resolvable::getValue() const {
-  return *m_value;
-}
-
 LinearForm::LinearForm(const Variable& v) :
   m_coefficients(),
   m_const(0)
 {
-  m_coefficients[v.m_resolvable] = 1;
+  m_coefficients[v.id] = 1;
 }
 
 LinearForm::LinearForm(double d) :
