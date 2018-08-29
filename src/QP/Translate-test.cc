@@ -36,6 +36,7 @@ using namespace QP;
 
 #define CHECK_VECTOR(actual, expected) do { \
   const int n = expected.size(); \
+  BOOST_CHECK_EQUAL(actual.size(), n); \
   for(int i = 0; i != n; ++i) { \
     BOOST_CHECK_EQUAL(actual[i], expected[i]); \
   } \
@@ -131,4 +132,69 @@ BOOST_AUTO_TEST_CASE(TranslateLessThanConstraint) {
   CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(b + a + 2 <= 0, ({{-1}, {-1}}), {-2});
   CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(a + 2*b + 3 <= 0, ({{-1}, {-2}}), {-3});
   CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(b + 2*a + 3 <= 0, ({{-2}, {-1}}), {-3});
+}
+
+auto d2(Variable left, Variable right, float l0) {
+  auto d = (right - left) - l0;
+  return d * d;
+}
+
+BOOST_AUTO_TEST_CASE(SpringChainExample) {
+  Variable x0, x1, x2, x3, x4;
+  Translation t = translate(
+    0.5 * (
+      1 * d2(x0, x1, 2)
+      + 1 * d2(x1, x2, 3)
+      + 10 * d2(x2, x3, 5)
+      + 1 * d2(x3, x4, 2)
+    ),
+    {x0 == 0, x4 == 10}
+  );
+
+  CHECK_SIZES(t);
+
+  CHECK_MATRIX(t.G, std::vector<std::vector<double>>({
+    { 1, -1,   0,   0,  0},
+    {-1,  2,  -1,   0,  0},
+    { 0, -1,  11, -10,  0},
+    { 0,  0, -10,  11, -1},
+    { 0,  0,   0,  -1,  1},
+  }));
+  CHECK_VECTOR(t.G0, std::vector<double>({2, 1, 47, -48, -2}));
+  BOOST_CHECK_EQUAL(t.baseCost, 133.5);
+
+  CHECK_MATRIX(t.CE, std::vector<std::vector<double>>({{1, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 1}}));
+  CHECK_VECTOR(t.CE0, std::vector<double>({0, -10}));
+
+  CHECK_MATRIX(t.CI, std::vector<std::vector<double>>({{}, {}, {}, {}, {}}));
+  CHECK_VECTOR(t.CI0, std::vector<double>({}));
+}
+
+BOOST_AUTO_TEST_CASE(QuickStart) {
+  Variable a, b, c;
+
+  Translation t = translate(
+    a + b + (a - b) * (a - b) + c + (b - c) * (b - c),
+    {a <= 1, c >= 4, a - 2 * b <= 12}
+  );
+
+  CHECK_SIZES(t);
+
+  CHECK_MATRIX(t.G, std::vector<std::vector<double>>({
+    {2, -2, 0},
+    {-2, 4, -2},
+    {0, -2, 2},
+  }));
+  CHECK_VECTOR(t.G0, std::vector<double>({1, 1, 1}));
+  BOOST_CHECK_EQUAL(t.baseCost, 0);
+
+  CHECK_MATRIX(t.CE, std::vector<std::vector<double>>({{}, {}, {}}));
+  CHECK_VECTOR(t.CE0, std::vector<double>({}));
+
+  CHECK_MATRIX(t.CI, std::vector<std::vector<double>>({
+    {-1, 0, -1},
+    {0, 0, 2},
+    {0, 1, 0},
+  }));
+  CHECK_VECTOR(t.CI0, std::vector<double>({1, -4, 12}));
 }
