@@ -5,7 +5,6 @@
 #include "Translate.hpp"
 using namespace QP;
 
-
 #define CHECK_SIZES(t) do { \
   BOOST_CHECK_EQUAL(t.G.nrows(), t.n); \
   BOOST_CHECK_EQUAL(t.G.ncols(), t.n); \

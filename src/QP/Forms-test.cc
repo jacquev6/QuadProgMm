@@ -5,7 +5,6 @@
 #include "Forms.hpp"
 using namespace QP;
 
-
 void expect_linear_form(const LinearForm&) {}
 void expect_quadratic_form(const QuadraticForm&) {}
 

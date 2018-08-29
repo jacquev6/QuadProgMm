@@ -11,38 +11,36 @@
 #include "Forms.hpp"
 
 namespace QP {
-
-class Solution {
-  public:
-    double getCost() const {
-      return cost;
-    }
-
-    boost::optional<double> get(const Variable& v) const {
-      const std::map<Variable, double>::const_iterator it = values.find(v);
-      if (it == values.end()) {
-        return boost::optional<double>();
-      } else {
-        return it->second;
+  class Solution {
+    public:
+      double getCost() const {
+        return cost;
       }
-    }
 
-  public:
-    Solution(double cost_, const std::map<Variable, double>& values_) :
-      cost(cost_),
-      values(values_)
-    {
-    }
+      boost::optional<double> get(const Variable& v) const {
+        const std::map<Variable, double>::const_iterator it = values.find(v);
+        if (it == values.end()) {
+          return boost::optional<double>();
+        } else {
+          return it->second;
+        }
+      }
 
-  private:
-    const double cost;
-    std::map<Variable, double> values;
-};
+    public:
+      Solution(double cost_, const std::map<Variable, double>& values_) :
+        cost(cost_),
+        values(values_)
+      {
+      }
 
-Solution minimize(const QuadraticForm&, const std::vector<Constraint>& = {});
+    private:
+      const double cost;
+      std::map<Variable, double> values;
+  };
 
-Solution maximize(const QuadraticForm&, const std::vector<Constraint>& = {});
+  Solution minimize(const QuadraticForm&, const std::vector<Constraint>& = {});
 
-} // Namespace
+  Solution maximize(const QuadraticForm&, const std::vector<Constraint>& = {});
+}
 
 #endif // Include guard

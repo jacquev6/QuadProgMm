@@ -5,7 +5,6 @@
 #include "QP.hpp"
 using namespace QP;
 
-
 BOOST_AUTO_TEST_CASE(OneVariableNoConstraint) {
   Variable a;
   {
