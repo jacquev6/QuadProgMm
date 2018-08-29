@@ -37,9 +37,9 @@ namespace QP {
          x: n
     */
     std::vector<std::pair<Variable, int>> variables;
-    double baseCost;
     quadprogpp::Matrix<double> G, CE, CI;
-    quadprogpp::Vector<double> G0, CE0, CI0;
+    quadprogpp::Vector<double> g0, ce0, ci0;
+    double g00;
   };
 
   Translation translate(const QuadraticForm&, const std::vector<Constraint>&);

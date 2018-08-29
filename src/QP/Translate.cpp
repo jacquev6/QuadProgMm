@@ -39,28 +39,28 @@ namespace QP {
     int m = inequalityConstraints;
 
     t.G.resize(n, n);
-    t.G0.resize(n);
+    t.g0.resize(n);
     t.CE.resize(n, p);
-    t.CE0.resize(p);
+    t.ce0.resize(p);
     t.CI.resize(n, m);
-    t.CI0.resize(m);
+    t.ci0.resize(m);
 
     for(int i = 0; i < n; ++i) {
       for(int j = 0; j < n; ++j) {
-        t.G0[j] = 0;
+        t.g0[j] = 0;
         t.G[i][j] = 0;
       }
       for(int j = 0; j < p; ++j) {
-        t.CE0[j] = 0;
+        t.ce0[j] = 0;
         t.CE[i][j] = 0;
       }
       for(int j = 0; j < m; ++j) {
-        t.CI0[j] = 0;
+        t.ci0[j] = 0;
         t.CI[i][j] = 0;
       }
     }
 
-    t.baseCost = 0;
+    t.g00 = 0;
 
     foreach(auto it1, t.variables) {
       foreach(auto it2, t.variables) {
@@ -77,26 +77,26 @@ namespace QP {
     }
 
     foreach(auto it, t.variables) {
-      t.G0[it.second] = q.getLinearCoefficient(it.first);
+      t.g0[it.second] = q.getLinearCoefficient(it.first);
     }
 
-    t.baseCost += q.getConstantCoefficient();
+    t.g00 += q.getConstantCoefficient();
 
     int indexE = 0;
     int indexI = 0;
     foreach(Constraint c, constraints) {
       quadprogpp::Matrix<double>* C;
-      quadprogpp::Vector<double>* C0;
+      quadprogpp::Vector<double>* c0;
       int* index;
       switch(c.getType()) {
         case Constraint::ZERO:
           C = &t.CE;
-          C0 = &t.CE0;
+          c0 = &t.ce0;
           index = &indexE;
           break;
         case Constraint::POSITIVE:
           C = &t.CI;
-          C0 = &t.CI0;
+          c0 = &t.ci0;
           index = &indexI;
           break;
       }
@@ -106,7 +106,7 @@ namespace QP {
         (*C)[it.second][*index] = l.getLinearCoefficient(it.first);
       }
 
-      (*C0)[*index] = l.getConstantCoefficient();
+      (*c0)[*index] = l.getConstantCoefficient();
       ++(*index);
     }
 

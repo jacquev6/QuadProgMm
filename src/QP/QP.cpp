@@ -14,14 +14,14 @@ namespace QP {
 
     quadprogpp::Vector<double> x;
 
-    double cost = quadprogpp::solve_quadprog(t.G, t.G0, t.CE, t.CE0, t.CI, t.CI0, x);
+    double cost = quadprogpp::solve_quadprog(t.G, t.g0, t.CE, t.ce0, t.CI, t.ci0, x);
 
     std::map<Variable, double> values;
     foreach(auto it, t.variables) {
       values[it.first] = x[it.second];
     }
 
-    return Solution(cost + t.baseCost, values);
+    return Solution(cost + t.g00, values);
   }
 
   Solution maximize(const QuadraticForm& q, const std::vector<Constraint>& constraints) {
