@@ -90,8 +90,8 @@ BOOST_AUTO_TEST_CASE(TranslateEqualityConstraint) {
   CHECK_EQUALITY_CONSTRAINT_TRANSLATION(a + b == 0, ({{1}, {1}}), {0});
   CHECK_EQUALITY_CONSTRAINT_TRANSLATION(a + b + 2 == 0, ({{1}, {1}}), {2});
   CHECK_EQUALITY_CONSTRAINT_TRANSLATION(b + a + 2 == 0, ({{1}, {1}}), {2});
-  // CHECK_EQUALITY_CONSTRAINT_TRANSLATION(a + 2*b + 3 == 0, ({{1}, {2}}), {3});
-  // CHECK_EQUALITY_CONSTRAINT_TRANSLATION(b + 2*a + 3 == 0, ({{2}, {1}}), {3});
+  CHECK_EQUALITY_CONSTRAINT_TRANSLATION(a + 2*b + 3 == 0, ({{1}, {2}}), {3});
+  CHECK_EQUALITY_CONSTRAINT_TRANSLATION(b + 2*a + 3 == 0, ({{2}, {1}}), {3});
 }
 
 #define CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(c, _CI, _CI0) do { \
@@ -114,8 +114,8 @@ BOOST_AUTO_TEST_CASE(TranslateGreaterThanConstraint) {
   CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(a + b >= 0, ({{1}, {1}}), {0});
   CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(a + b + 2 >= 0, ({{1}, {1}}), {2});
   CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(b + a + 2 >= 0, ({{1}, {1}}), {2});
-  // CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(a + 2*b + 3 >= 0, ({{1}, {2}}), {3});
-  // CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(b + 2*a + 3 >= 0, ({{2}, {1}}), {3});
+  CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(a + 2*b + 3 >= 0, ({{1}, {2}}), {3});
+  CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(b + 2*a + 3 >= 0, ({{2}, {1}}), {3});
 }
 
 BOOST_AUTO_TEST_CASE(TranslateLessThanConstraint) {
@@ -129,6 +129,6 @@ BOOST_AUTO_TEST_CASE(TranslateLessThanConstraint) {
   CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(a + b <= 0, ({{-1}, {-1}}), {0});
   CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(a + b + 2 <= 0, ({{-1}, {-1}}), {-2});
   CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(b + a + 2 <= 0, ({{-1}, {-1}}), {-2});
-  // CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(a + 2*b + 3 <= 0, ({{-1}, {-2}}), {-3});
-  // CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(b + 2*a + 3 <= 0, ({{-2}, {-1}}), {-3});
+  CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(a + 2*b + 3 <= 0, ({{-1}, {-2}}), {-3});
+  CHECK_INEQUALITY_CONSTRAINT_TRANSLATION(b + 2*a + 3 <= 0, ({{-2}, {-1}}), {-3});
 }
