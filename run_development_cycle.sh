@@ -33,11 +33,13 @@ make tst
 rm -rf docs
 sphinx-build doc docs
 
+make post_doc
+
 diff <(tail -4 README.rst | sed "s|^    ||") doc/quick_start.out
 
-show_in_browser "Documentation" $PROJECT_ROOT/docs/index.html
+sphinx-build doc docs
 
-make post_doc
+show_in_browser "Documentation" $PROJECT_ROOT/docs/index.html
 
 echo
 echo "Development cycle OK"
