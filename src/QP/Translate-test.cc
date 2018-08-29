@@ -6,6 +6,7 @@
 using namespace QP;
 
 #define CHECK_SIZES(t) do { \
+  BOOST_CHECK_EQUAL(t.variables.size(), t.G.nrows()); \
   BOOST_CHECK_EQUAL(t.G.ncols(), t.G.nrows()); \
   BOOST_CHECK_EQUAL(t.g0.size(), t.G.nrows()); \
   BOOST_CHECK_EQUAL(t.CE.nrows(), t.G.nrows()); \

@@ -26,13 +26,7 @@ namespace QP {
       allVariables.insert(constraintVariables.begin(), constraintVariables.end());
     }
 
-    {
-      int index = 0;
-      foreach(Variable v, allVariables) {
-        t.variables.push_back(std::make_pair(v, index));
-        ++index;
-      }
-    }
+    t.variables = std::vector<Variable>(allVariables.begin(), allVariables.end());
 
     int n = t.variables.size();
     int p = equalityConstraints;
@@ -62,22 +56,30 @@ namespace QP {
 
     t.g00 = 0;
 
-    foreach(auto it1, t.variables) {
-      foreach(auto it2, t.variables) {
-        const int index1 = it1.second;
-        const int index2 = it2.second;
-        const double coeff = q.getQuadraticCoefficient(it1.first, it2.first);
-        if (index1 == index2) {
-          t.G[index1][index1] = 2 * coeff;
-        } else {
-          t.G[index1][index2] = coeff;
-          t.G[index2][index1] = coeff;
+    {
+      int index1 = 0;
+      foreach(Variable v1, t.variables) {
+        int index2 = 0;
+        foreach(Variable v2, t.variables) {
+          const double coeff = q.getQuadraticCoefficient(v1, v2);
+          if (index1 == index2) {
+            t.G[index1][index1] = 2 * coeff;
+          } else {
+            t.G[index1][index2] = coeff;
+            t.G[index2][index1] = coeff;
+          }
+          ++index2;
         }
+        ++index1;
       }
     }
 
-    foreach(auto it, t.variables) {
-      t.g0[it.second] = q.getLinearCoefficient(it.first);
+    {
+      int index = 0;
+      foreach(Variable v, t.variables) {
+        t.g0[index] = q.getLinearCoefficient(v);
+        ++index;
+      }
     }
 
     t.g00 += q.getConstantCoefficient();
@@ -85,29 +87,33 @@ namespace QP {
     int indexE = 0;
     int indexI = 0;
     foreach(Constraint c, constraints) {
-      quadprogpp::Matrix<double>* C;
-      quadprogpp::Vector<double>* c0;
-      int* index;
+      quadprogpp::Matrix<double>* CIE;
+      quadprogpp::Vector<double>* cie0;
+      int* indexIE;
       switch(c.getType()) {
         case Constraint::ZERO:
-          C = &t.CE;
-          c0 = &t.ce0;
-          index = &indexE;
+          CIE = &t.CE;
+          cie0 = &t.ce0;
+          indexIE = &indexE;
           break;
         case Constraint::POSITIVE:
-          C = &t.CI;
-          c0 = &t.ci0;
-          index = &indexI;
+          CIE = &t.CI;
+          cie0 = &t.ci0;
+          indexIE = &indexI;
           break;
       }
 
       const LinearForm& l = c.getLinearForm();
-      foreach(auto it, t.variables) {
-        (*C)[it.second][*index] = l.getLinearCoefficient(it.first);
+      {
+        int index = 0;
+        foreach(Variable v, t.variables) {
+          (*CIE)[index][*indexIE] = l.getLinearCoefficient(v);
+          ++index;
+        }
       }
 
-      (*c0)[*index] = l.getConstantCoefficient();
-      ++(*index);
+      (*cie0)[*indexIE] = l.getConstantCoefficient();
+      ++(*indexIE);
     }
 
     return t;

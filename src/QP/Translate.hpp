@@ -36,7 +36,7 @@ namespace QP {
 
          x: n
     */
-    std::vector<std::pair<Variable, int>> variables;
+    std::vector<Variable> variables;
     quadprogpp::Matrix<double> G, CE, CI;
     quadprogpp::Vector<double> g0, ce0, ci0;
     double g00;
