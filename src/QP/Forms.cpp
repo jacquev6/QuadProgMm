@@ -80,6 +80,15 @@ const LinearForm::Coefficients& LinearForm::getCoefficients() const {
   return m_coefficients;
 }
 
+double LinearForm::getCoefficient(const Variable& v) const {
+  auto it = m_coefficients.find(v);
+  if (it == m_coefficients.end()) {
+    return 0;
+  } else {
+    return it->second;
+  }
+}
+
 double LinearForm::getConstant() const {
   return m_const;
 }
@@ -144,13 +153,22 @@ QuadraticForm::QuadraticForm(const LinearForm& l, const LinearForm& r) :
 {
   foreach(LinearForm::Coefficient lc, l.getCoefficients()) {
     foreach(LinearForm::Coefficient rc, r.getCoefficients()) {
-      m_coefficients[std::make_pair(lc.first, rc.first)] = lc.second * rc.second;
+      m_coefficients[std::minmax(lc.first, rc.first)] += lc.second * rc.second;
     }
   }
 }
 
 const QuadraticForm::Coefficients& QuadraticForm::getCoefficients() const {
   return m_coefficients;
+}
+
+double QuadraticForm::getCoefficient(const Variable& v1, const Variable& v2) const {
+  auto it = m_coefficients.find(std::minmax(v1, v2));
+  if (it == m_coefficients.end()) {
+    return 0;
+  } else {
+    return it->second;
+  }
 }
 
 const LinearForm& QuadraticForm::getLinearForm() const {

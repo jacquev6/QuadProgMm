@@ -7,46 +7,40 @@
 
 namespace QP {
 
+std::set<Variable> variables(const QuadraticForm& q) {
+  std::set<Variable> variables;
+  foreach(QuadraticForm::Coefficient c, q.getCoefficients()) {
+    variables.insert(c.first.first);
+    variables.insert(c.first.second);
+  }
+  foreach(LinearForm::Coefficient c, q.getLinearForm().getCoefficients()) {
+    variables.insert(c.first);
+  }
+  return variables;
+}
+
 Translation translate(const QuadraticForm& q, const std::vector<Constraint>& constraints) {
   Translation t;
 
   int equalityConstraints = 0;
   int inequalityConstraints = 0;
 
+  std::set<Variable> allVariables = variables(q);
+  foreach(Constraint c, constraints) {
+    if(c.isEquality()) {
+      ++equalityConstraints;
+    } else {
+      ++inequalityConstraints;
+    }
+    const std::set<Variable> constraintVariables = variables(c.getLinearForm());
+    allVariables.insert(constraintVariables.begin(), constraintVariables.end());
+  }
+
   {
     int index = 0;
-
-    foreach(QuadraticForm::Coefficient c, q.getCoefficients()) {
-      if(t.variables.left.find(c.first.first) == t.variables.left.end()) {
-        t.variables.insert(Variables::value_type(c.first.first, index));
-        ++index;
-      }
-      if(t.variables.left.find(c.first.second) == t.variables.left.end()) {
-        t.variables.insert(Variables::value_type(c.first.second, index));
-        ++index;
-      }
-    }
-    const LinearForm& l = q.getLinearForm();
-    foreach(LinearForm::Coefficient c, l.getCoefficients()) {
-      if(t.variables.left.find(c.first) == t.variables.left.end()) {
-        t.variables.insert(Variables::value_type(c.first, index));
-        ++index;
-      }
-    }
-
-    foreach(Constraint c, constraints) {
-      if(c.isEquality()) {
-        ++equalityConstraints;
-      } else {
-        ++inequalityConstraints;
-      }
-      const LinearForm& l = c.getLinearForm();
-      foreach(LinearForm::Coefficient c, l.getCoefficients()) {
-        if(t.variables.left.find(c.first) == t.variables.left.end()) {
-          t.variables.insert(Variables::value_type(c.first, index));
-          ++index;
-        }
-      }
+    foreach(Variable id, allVariables) {
+      t.variables.insert(Variables::value_type(id, index));
+      ++index;
     }
   }
 
@@ -78,21 +72,24 @@ Translation translate(const QuadraticForm& q, const std::vector<Constraint>& con
 
   t.baseCost = 0;
 
-  foreach(QuadraticForm::Coefficient c, q.getCoefficients()) {
-    int v1 = t.variables.left.find(c.first.first)->second;
-    int v2 = t.variables.left.find(c.first.second)->second;
-    double coeff = c.second;
-
-    t.G[v1][v2] += coeff;
-    t.G[v2][v1] += coeff;
+  foreach(auto it1, t.variables.left) {
+    foreach(auto it2, t.variables.left) {
+      const int index1 = it1.second;
+      const int index2 = it2.second;
+      const double coeff = q.getCoefficient(it1.first, it2.first);
+      if (index1 == index2) {
+        t.G[index1][index1] = 2 * coeff;
+      } else {
+        t.G[index1][index2] = coeff;
+        t.G[index2][index1] = coeff;
+      }
+    }
   }
   const LinearForm& l = q.getLinearForm();
-  foreach(LinearForm::Coefficient c, l.getCoefficients()) {
-    int v = t.variables.left.find(c.first)->second;
-    double coeff = c.second;
-
-    t.G0[v] += coeff;
+  foreach(auto it, t.variables.left) {
+    t.G0[it.second] = l.getCoefficient(it.first);
   }
+
   t.baseCost += l.getConstant();
 
   int index = 0;
@@ -101,12 +98,10 @@ Translation translate(const QuadraticForm& q, const std::vector<Constraint>& con
     quadprogpp::Vector<double>& C0 = c.isEquality() ? t.CE0 : t.CI0;
 
     const LinearForm& l = c.getLinearForm();
-    foreach(LinearForm::Coefficient c, l.getCoefficients()) {
-      int v = t.variables.left.find(c.first)->second;
-      double coeff = c.second;
-
-      C[v][index] = coeff;
+    foreach(auto it, t.variables.left) {
+      C[it.second][index] = l.getCoefficient(it.first);
     }
+
     C0[index] = l.getConstant();
     ++index;
   }

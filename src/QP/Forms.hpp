@@ -70,6 +70,8 @@ class LinearForm :
     typedef std::map<Variable, double> Coefficients;
     typedef Coefficients::value_type Coefficient;
     const Coefficients& getCoefficients() const;
+
+    double getCoefficient(const Variable&) const;
     double getConstant() const;
 
   private:
@@ -98,10 +100,12 @@ class QuadraticForm :
     QuadraticForm& operator *=(double);
     QuadraticForm& operator /=(double);
 
-  public:  // @todo Why public?
+  public:
     typedef std::map<std::pair<Variable, Variable>, double> Coefficients;
     typedef Coefficients::value_type Coefficient;
     const Coefficients& getCoefficients() const;
+
+    double getCoefficient(const Variable&, const Variable&) const;
     const LinearForm& getLinearForm() const;
 
   private:
