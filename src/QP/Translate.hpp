@@ -43,7 +43,7 @@ struct Translation {
   double baseCost;
   int n, m, p;
   quadprogpp::Matrix<double> G, CE, CI;
-  quadprogpp::Vector<double> G0, CE0, CI0, x;
+  quadprogpp::Vector<double> G0, CE0, CI0;
 };
 
 Translation translate(const QuadraticForm&, const std::vector<Constraint>&);
