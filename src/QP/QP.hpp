@@ -16,7 +16,7 @@ class Solution {
     }
 
     boost::optional<double> get(const Variable& v) const {
-      const std::map<int, double>::const_iterator it = values.find(v.id);
+      const std::map<Variable, double>::const_iterator it = values.find(v);
       if (it == values.end()) {
         return boost::optional<double>();
       } else {
@@ -25,7 +25,7 @@ class Solution {
     }
 
   public:
-    Solution(double cost_, const std::map<int, double>& values_) :
+    Solution(double cost_, const std::map<Variable, double>& values_) :
       cost(cost_),
       values(values_)
     {
@@ -33,7 +33,7 @@ class Solution {
 
   private:
     const double cost;
-    std::map<int, double> values;
+    std::map<Variable, double> values;
 };
 
 Solution minimize(const QuadraticForm&, const std::vector<Constraint>& = std::vector<Constraint>());

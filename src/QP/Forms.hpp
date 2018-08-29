@@ -16,11 +16,11 @@ class LinearForm;
 class Solution;
 
 class Variable {
-  friend class LinearForm;
-  friend class Solution;
-
   public:
     Variable();
+
+  public:
+    bool operator < (const Variable& other) const {return id < other.id;}
 
   public:
     operator QuadraticForm () const;
@@ -42,7 +42,7 @@ class Variable {
     friend QuadraticForm operator * (const Variable&, const Variable&);
 
   private:
-    const int id;
+    int id;
     static int nextId;
 };
 
@@ -67,8 +67,8 @@ class LinearForm :
     LinearForm operator + () const;
 
   public:
-    typedef std::pair<int, double> Coefficient;
-    typedef std::map<int, double> Coefficients;
+    typedef std::map<Variable, double> Coefficients;
+    typedef Coefficients::value_type Coefficient;
     const Coefficients& getCoefficients() const;
     double getConstant() const;
 
@@ -99,8 +99,8 @@ class QuadraticForm :
     QuadraticForm& operator /=(double);
 
   public:  // @todo Why public?
-    typedef std::pair<std::pair<int, int>, double> Coefficient;
-    typedef std::map<std::pair<int, int>, double> Coefficients;
+    typedef std::map<std::pair<Variable, Variable>, double> Coefficients;
+    typedef Coefficients::value_type Coefficient;
     const Coefficients& getCoefficients() const;
     const LinearForm& getLinearForm() const;
 

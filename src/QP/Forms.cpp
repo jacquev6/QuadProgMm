@@ -67,7 +67,7 @@ LinearForm::LinearForm(const Variable& v) :
   m_coefficients(),
   m_const(0)
 {
-  m_coefficients[v.id] = 1;
+  m_coefficients[v] = 1;
 }
 
 LinearForm::LinearForm(double d) :
