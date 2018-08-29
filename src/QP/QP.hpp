@@ -4,9 +4,6 @@
 // Standard library
 #include <vector>
 
-// Boost
-#include <boost/optional.hpp>
-
 // QP
 #include "Forms.hpp"
 
@@ -17,13 +14,9 @@ namespace QP {
         return cost;
       }
 
-      boost::optional<double> get(const Variable& v) const {
-        const std::map<Variable, double>::const_iterator it = values.find(v);
-        if (it == values.end()) {
-          return boost::optional<double>();
-        } else {
-          return it->second;
-        }
+      // Behavior is undefined when calling with a variable that was not part of the problem
+      double get(const Variable& v) const {
+        return values.find(v)->second;
       }
 
     public:
