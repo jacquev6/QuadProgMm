@@ -1,8 +1,8 @@
 #ifndef QP_Translate_hpp
 #define QP_Translate_hpp
 
-// Boost
-#include <boost/bimap.hpp>
+// Standard library
+#include <vector>
 
 // QuadProg++
 #include <QuadProg++.hh>
@@ -14,8 +14,6 @@
 #include "Forms.hpp"
 
 namespace QP {
-  typedef boost::bimap<Variable, int> Variables;
-
   struct Translation {
     /* From QuadProg++:
 
@@ -38,7 +36,7 @@ namespace QP {
 
          x: n
     */
-    Variables variables;
+    std::vector<std::pair<Variable, int>> variables;
     double baseCost;
     int n, m, p;
     quadprogpp::Matrix<double> G, CE, CI;

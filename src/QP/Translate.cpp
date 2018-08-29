@@ -28,8 +28,8 @@ namespace QP {
 
     {
       int index = 0;
-      foreach(Variable id, allVariables) {
-        t.variables.insert(Variables::value_type(id, index));
+      foreach(Variable v, allVariables) {
+        t.variables.push_back(std::make_pair(v, index));
         ++index;
       }
     }
@@ -62,8 +62,8 @@ namespace QP {
 
     t.baseCost = 0;
 
-    foreach(auto it1, t.variables.left) {
-      foreach(auto it2, t.variables.left) {
+    foreach(auto it1, t.variables) {
+      foreach(auto it2, t.variables) {
         const int index1 = it1.second;
         const int index2 = it2.second;
         const double coeff = q.getQuadraticCoefficient(it1.first, it2.first);
@@ -76,7 +76,7 @@ namespace QP {
       }
     }
 
-    foreach(auto it, t.variables.left) {
+    foreach(auto it, t.variables) {
       t.G0[it.second] = q.getLinearCoefficient(it.first);
     }
 
@@ -102,7 +102,7 @@ namespace QP {
       }
 
       const LinearForm& l = c.getLinearForm();
-      foreach(auto it, t.variables.left) {
+      foreach(auto it, t.variables) {
         (*C)[it.second][*index] = l.getLinearCoefficient(it.first);
       }
 

@@ -17,9 +17,8 @@ namespace QP {
     double cost = quadprogpp::solve_quadprog(t.G, t.G0, t.CE, t.CE0, t.CI, t.CI0, x);
 
     std::map<Variable, double> values;
-    for(int i = 0; i < t.n; ++i) {
-      assert(t.variables.right.find(i) != t.variables.right.end());
-      values[t.variables.right.find(i)->second] = x[i];
+    foreach(auto it, t.variables) {
+      values[it.first] = x[it.second];
     }
 
     return Solution(cost + t.baseCost, values);
