@@ -30,6 +30,7 @@ done
 
 make tst
 
+rm -rf docs
 sphinx-build doc docs
 
 diff <(tail -4 README.rst | sed "s|^    ||") doc/quick_start.out
