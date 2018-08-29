@@ -1,6 +1,10 @@
 // Header
 #include "Forms.hpp"
 
+// Standard library
+#include <algorithm>
+#include <vector>
+
 // Boost
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH

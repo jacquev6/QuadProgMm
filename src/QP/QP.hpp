@@ -1,6 +1,9 @@
 #ifndef QP_QP_hpp
 #define QP_QP_hpp
 
+// Standard library
+#include <vector>
+
 // Boost
 #include <boost/optional.hpp>
 
@@ -36,9 +39,9 @@ class Solution {
     std::map<Variable, double> values;
 };
 
-Solution minimize(const QuadraticForm&, const std::vector<Constraint>& = std::vector<Constraint>());
+Solution minimize(const QuadraticForm&, const std::vector<Constraint>& = {});
 
-Solution maximize(const QuadraticForm&, const std::vector<Constraint>& = std::vector<Constraint>());
+Solution maximize(const QuadraticForm&, const std::vector<Constraint>& = {});
 
 } // Namespace
 

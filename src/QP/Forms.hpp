@@ -3,17 +3,13 @@
 
 // Standard library
 #include <map>
-#include <vector>
 
 // Boost
 #include <boost/operators.hpp>
-#include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
 
 namespace QP {
-class QuadraticForm;
 class LinearForm;
-class Solution;
+class QuadraticForm;
 
 class Variable {
   public:
