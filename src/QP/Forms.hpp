@@ -3,128 +3,113 @@
 
 // Standard library
 #include <map>
+#include <set>
 
 // Boost
 #include <boost/operators.hpp>
 
 namespace QP {
-  class LinearForm;
-  class QuadraticForm;
+  struct Variable {
+    Variable();
 
-  class Variable {
-    public:
-      Variable();
-
-    public:
-      bool operator < (const Variable& other) const {return id < other.id;}
-
-    public:
-      operator QuadraticForm () const;
-      LinearForm operator - () const;
-      LinearForm operator + () const;
-
-      friend LinearForm operator + (const Variable&, double);
-      friend LinearForm operator + (double, const Variable&);
-      friend LinearForm operator + (const Variable&, const Variable&);
-
-      friend LinearForm operator - (const Variable&, double);
-      friend LinearForm operator - (double, const Variable&);
-      friend LinearForm operator - (const Variable&, const Variable&);
-
-      friend LinearForm operator * (const Variable&, double);
-      friend LinearForm operator / (const Variable&, double);
-      friend LinearForm operator * (double, const Variable&);
-
-      friend QuadraticForm operator * (const Variable&, const Variable&);
+    bool operator < (const Variable& other) const {return id < other.id;}
 
     private:
       int id;
       static int nextId;
   };
 
-  class LinearForm :
+  struct QuadraticForm;
+
+  struct LinearForm :
     boost::addable<LinearForm>,
     boost::subtractable<LinearForm>,
-    boost::multipliable2<LinearForm, double>,
-    boost::dividable2<LinearForm, double>
+    boost::multipliable<LinearForm, double>,
+    boost::dividable<LinearForm, double>
   {
-    public:
-      LinearForm(double);
-      LinearForm(const Variable&);
+    // @todo Could/should we have a single private ctor taking coefficients and const?
+    LinearForm(double);
+    LinearForm(const Variable&);
 
-    public:
-      LinearForm& operator *= (double);
-      LinearForm& operator /= (double);
-      LinearForm& operator += (const LinearForm&);
-      LinearForm& operator -= (const LinearForm&);
+    LinearForm& operator += (const LinearForm&);
+    LinearForm& operator -= (const LinearForm&);
+    LinearForm& operator *= (double);
+    LinearForm& operator /= (double);
 
-    public:
-      LinearForm operator - () const;
-      LinearForm operator + () const;
-
-    public:
-      typedef std::map<Variable, double> Coefficients;
-      typedef Coefficients::value_type Coefficient;
-      const Coefficients& getCoefficients() const;
-
-      double getCoefficient(const Variable&) const;
-      double getConstant() const;
+    std::set<Variable> getVariables() const;
+    double getLinearCoefficient(const Variable&) const;
+    double getConstantCoefficient() const;
 
     private:
-      Coefficients m_coefficients;
-      double m_const;
+      std::map<Variable, double> linearCoefficients;
+      double constantCoefficient;
+
+      friend QuadraticForm;
   };
 
-  QuadraticForm operator * (const LinearForm&, const LinearForm&);
-
-  class QuadraticForm :
+  struct QuadraticForm :
     boost::addable<QuadraticForm>,
     boost::subtractable<QuadraticForm>,
-    boost::multipliable2<QuadraticForm, double>,
-    boost::dividable2<QuadraticForm, double>
+    boost::multipliable<QuadraticForm, double>,
+    boost::dividable<QuadraticForm, double>
   {
-    public:
-      QuadraticForm(double);
-      QuadraticForm(const LinearForm&);
-      QuadraticForm(const LinearForm& a, const LinearForm& b);
+    // @todo Could/should we have a single private ctor taking coefficients and const?
+    QuadraticForm(double);
+    QuadraticForm(const Variable&);
+    QuadraticForm(const LinearForm&);
+    QuadraticForm(const LinearForm& a, const LinearForm& b);
 
-    public:
-      QuadraticForm& operator +=(const QuadraticForm&);
-      QuadraticForm& operator -=(const QuadraticForm&);
-      QuadraticForm operator -() const;
-      QuadraticForm operator +() const;
-      QuadraticForm& operator *=(double);
-      QuadraticForm& operator /=(double);
+    QuadraticForm& operator +=(const QuadraticForm&);
+    QuadraticForm& operator -=(const QuadraticForm&);
+    QuadraticForm& operator *=(double);
+    QuadraticForm& operator /=(double);
 
-    public:
-      typedef std::map<std::pair<Variable, Variable>, double> Coefficients;
-      typedef Coefficients::value_type Coefficient;
-      const Coefficients& getCoefficients() const;
-
-      double getCoefficient(const Variable&, const Variable&) const;
-      const LinearForm& getLinearForm() const;
+    std::set<Variable> getVariables() const;
+    double getQuadraticCoefficient(const Variable&, const Variable&) const;
+    double getLinearCoefficient(const Variable&) const;
+    double getConstantCoefficient() const;
 
     private:
-      LinearForm m_linearForm;
-      Coefficients m_coefficients;
+      std::map<std::pair<Variable, Variable>, double> quadraticCoefficients;
+      LinearForm linearForm;
   };
 
-  class Constraint {
-    public: // @todo Why public?
-      const LinearForm& getLinearForm() const;
-      bool isEquality() const;
+  LinearForm operator + (const Variable&);
+  LinearForm operator + (const LinearForm&);
+  QuadraticForm operator + (const QuadraticForm&);
+
+  LinearForm operator - (const Variable&);
+  LinearForm operator - (const LinearForm&);
+  QuadraticForm operator - (const QuadraticForm&);
+
+  LinearForm operator + (const Variable&, double);
+  LinearForm operator + (double, const Variable&);
+  LinearForm operator + (const Variable&, const Variable&);
+
+  LinearForm operator - (const Variable&, double);
+  LinearForm operator - (double, const Variable&);
+  LinearForm operator - (const Variable&, const Variable&);
+
+  LinearForm operator * (const Variable&, double);
+  LinearForm operator * (double, const Variable&);
+
+  QuadraticForm operator * (const Variable&, const Variable&);
+  QuadraticForm operator * (const LinearForm&, const LinearForm&);
+  LinearForm operator / (const Variable&, double);
+
+  struct Constraint {
+    const LinearForm& getLinearForm() const;
+
+    enum Type {ZERO, POSITIVE};
+    Type getType() const;
 
     private:
-      Constraint(const LinearForm&, bool isEquality);
-
-    private:
+      Constraint(const LinearForm&, Type);
       friend Constraint operator == (const LinearForm&, const LinearForm&);
       friend Constraint operator >= (const LinearForm&, const LinearForm&);
       friend Constraint operator <= (const LinearForm&, const LinearForm&);
-
-    private:
-      LinearForm m_linearForm;
-      bool m_isEquality;
+      LinearForm linearForm;
+      Type type;
   };
 
   Constraint operator == (const LinearForm&, const LinearForm&);

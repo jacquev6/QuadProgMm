@@ -6,32 +6,23 @@
 #define foreach BOOST_FOREACH
 
 namespace QP {
-  std::set<Variable> variables(const QuadraticForm& q) {
-    std::set<Variable> variables;
-    foreach(QuadraticForm::Coefficient c, q.getCoefficients()) {
-      variables.insert(c.first.first);
-      variables.insert(c.first.second);
-    }
-    foreach(LinearForm::Coefficient c, q.getLinearForm().getCoefficients()) {
-      variables.insert(c.first);
-    }
-    return variables;
-  }
-
   Translation translate(const QuadraticForm& q, const std::vector<Constraint>& constraints) {
     Translation t;
 
     int equalityConstraints = 0;
     int inequalityConstraints = 0;
 
-    std::set<Variable> allVariables = variables(q);
+    std::set<Variable> allVariables = q.getVariables();
     foreach(Constraint c, constraints) {
-      if(c.isEquality()) {
-        ++equalityConstraints;
-      } else {
-        ++inequalityConstraints;
+      switch(c.getType()) {
+        case Constraint::ZERO:
+          ++equalityConstraints;
+          break;
+        case Constraint::POSITIVE:
+          ++inequalityConstraints;
+          break;
       }
-      const std::set<Variable> constraintVariables = variables(c.getLinearForm());
+      const std::set<Variable> constraintVariables = c.getLinearForm().getVariables();
       allVariables.insert(constraintVariables.begin(), constraintVariables.end());
     }
 
@@ -75,7 +66,7 @@ namespace QP {
       foreach(auto it2, t.variables.left) {
         const int index1 = it1.second;
         const int index2 = it2.second;
-        const double coeff = q.getCoefficient(it1.first, it2.first);
+        const double coeff = q.getQuadraticCoefficient(it1.first, it2.first);
         if (index1 == index2) {
           t.G[index1][index1] = 2 * coeff;
         } else {
@@ -84,27 +75,39 @@ namespace QP {
         }
       }
     }
-    const LinearForm& l = q.getLinearForm();
+
     foreach(auto it, t.variables.left) {
-      t.G0[it.second] = l.getCoefficient(it.first);
+      t.G0[it.second] = q.getLinearCoefficient(it.first);
     }
 
-    t.baseCost += l.getConstant();
+    t.baseCost += q.getConstantCoefficient();
 
     int indexE = 0;
     int indexI = 0;
     foreach(Constraint c, constraints) {
-      quadprogpp::Matrix<double>& C = c.isEquality() ? t.CE : t.CI;
-      quadprogpp::Vector<double>& C0 = c.isEquality() ? t.CE0 : t.CI0;
-      int& index = c.isEquality() ? indexE : indexI;
+      quadprogpp::Matrix<double>* C;
+      quadprogpp::Vector<double>* C0;
+      int* index;
+      switch(c.getType()) {
+        case Constraint::ZERO:
+          C = &t.CE;
+          C0 = &t.CE0;
+          index = &indexE;
+          break;
+        case Constraint::POSITIVE:
+          C = &t.CI;
+          C0 = &t.CI0;
+          index = &indexI;
+          break;
+      }
 
       const LinearForm& l = c.getLinearForm();
       foreach(auto it, t.variables.left) {
-        C[it.second][index] = l.getCoefficient(it.first);
+        (*C)[it.second][*index] = l.getLinearCoefficient(it.first);
       }
 
-      C0[index] = l.getConstant();
-      ++index;
+      (*C0)[*index] = l.getConstantCoefficient();
+      ++(*index);
     }
 
     return t;

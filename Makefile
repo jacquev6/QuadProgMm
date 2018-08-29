@@ -1,6 +1,8 @@
+FLAGS=-Wall -Werror -pedantic
+
 build/depend: src/QP/*.cpp src/QP/*.hpp
 	@mkdir -p build
-	g++ -IQuadProgpp/src -MM $^ | sed "s|\(.*\):|build/\1:|" >$@
+	g++ $(FLAGS) -IQuadProgpp/src -MM $^ | sed "s|\(.*\):|build/\1:|" >$@
 
 include build/depend
 
@@ -12,7 +14,7 @@ build/%-test.ok: build/%-test.exe
 	touch $@
 
 build/%-test.exe: src/QP/%-test.cc build/libquadprogmm.a QuadProgpp/src/libquadprog.a
-	g++ -IQuadProgpp/src $^ -lboost_unit_test_framework -o $@
+	g++ $(FLAGS) -IQuadProgpp/src $^ -lboost_unit_test_framework -o $@
 
 
 lib: build/libquadprogmm.a
@@ -22,7 +24,7 @@ build/libquadprogmm.a: $(patsubst src/QP/%.cpp,build/%.o,$(wildcard src/QP/*.cpp
 
 build/%.o: src/QP/%.cpp QuadProgpp/src/libquadprog.a
 	@mkdir -p build
-	g++ -IQuadProgpp/src -c $< -o $@
+	g++ $(FLAGS) -IQuadProgpp/src -c $< -o $@
 
 QuadProgpp/src/libquadprog.a:
 	git submodule init
@@ -36,4 +38,4 @@ doc/%.out: build/%.exe
 	$^ >$@
 
 build/%.exe: doc/artifacts/%.cpp build/libquadprogmm.a
-	g++ -Isrc $^ QuadProgpp/src/libquadprog.a -o $@
+	g++ $(FLAGS) -Isrc $^ QuadProgpp/src/libquadprog.a -o $@

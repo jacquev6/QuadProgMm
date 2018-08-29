@@ -14,16 +14,58 @@ namespace QP {
 
   Variable::Variable() : id(++nextId) {}
 
-  Variable::operator QuadraticForm () const {
-    return QuadraticForm(LinearForm(*this));
+
+  LinearForm::LinearForm(double d) :
+    linearCoefficients(),
+    constantCoefficient(d)
+  {
   }
 
-  LinearForm Variable::operator - () const {
-    return -LinearForm(*this);
+  LinearForm::LinearForm(const Variable& v) :
+    linearCoefficients(),
+    constantCoefficient(0)
+  {
+    linearCoefficients[v] = 1;
   }
 
-  LinearForm Variable::operator + () const {
-    return LinearForm(*this);
+  LinearForm& LinearForm::operator += (const LinearForm& other) {
+    foreach(auto c, other.linearCoefficients) {
+      linearCoefficients[c.first] += c.second;
+    }
+    constantCoefficient += other.constantCoefficient;
+    return *this;
+  }
+
+  LinearForm& LinearForm::operator -= (const LinearForm& other) {
+    return *this += -other;
+  }
+
+  LinearForm& LinearForm::operator *= (double d) {
+    foreach(auto c, linearCoefficients) {
+      linearCoefficients[c.first] *= d;
+    }
+    constantCoefficient *= d;
+    return *this;
+  }
+
+  LinearForm& LinearForm::operator /= (double d) {
+    return *this *= 1/d;
+  }
+
+  LinearForm operator - (const LinearForm& l) {
+    return l * -1;
+  }
+
+  LinearForm operator + (const LinearForm& l) {
+    return l;
+  }
+
+  LinearForm operator - (const Variable& v) {
+    return -LinearForm(v);
+  }
+
+  LinearForm operator + (const Variable& v) {
+    return LinearForm(v);
   }
 
   LinearForm operator + (const Variable& l, const Variable& r) {
@@ -66,123 +108,96 @@ namespace QP {
     return l * LinearForm(r);
   }
 
-  LinearForm::LinearForm(const Variable& v) :
-    m_coefficients(),
-    m_const(0)
-  {
-    m_coefficients[v] = 1;
+  std::set<Variable> LinearForm::getVariables() const {
+    std::set<Variable> variables;
+    foreach(auto c, linearCoefficients) {
+      variables.insert(c.first);
+    }
+    return variables;
   }
 
-  LinearForm::LinearForm(double d) :
-    m_coefficients(),
-    m_const(d)
-  {
-  }
-
-  const LinearForm::Coefficients& LinearForm::getCoefficients() const {
-    return m_coefficients;
-  }
-
-  double LinearForm::getCoefficient(const Variable& v) const {
-    auto it = m_coefficients.find(v);
-    if (it == m_coefficients.end()) {
+  double LinearForm::getLinearCoefficient(const Variable& v) const {
+    auto it = linearCoefficients.find(v);
+    if (it == linearCoefficients.end()) {
       return 0;
     } else {
       return it->second;
     }
   }
 
-  double LinearForm::getConstant() const {
-    return m_const;
+  double LinearForm::getConstantCoefficient() const {
+    return constantCoefficient;
   }
 
   QuadraticForm operator * (const LinearForm& l, const LinearForm& r) {
     return QuadraticForm(l, r);
   }
 
-  LinearForm& LinearForm::operator += (const LinearForm& other) {
-    foreach(Coefficient c, other.m_coefficients) {
-      m_coefficients[c.first] += c.second;
-    }
-    m_const += other.m_const;
-    return *this;
-  }
-
-  LinearForm& LinearForm::operator -= (const LinearForm& other) {
-    return *this += -other;
-  }
-
-  LinearForm LinearForm::operator - () const {
-    LinearForm l(*this);
-    l *= -1;
-    return l;
-  }
-
-  LinearForm LinearForm::operator + () const {
-    return LinearForm(*this);
-  }
-
   LinearForm operator - (double l, const LinearForm& r) {
     return -(r - l);
   }
 
-  LinearForm& LinearForm::operator *= (double d) {
-    foreach(Coefficient c, m_coefficients) {
-      m_coefficients[c.first] *= d;
-    }
-    m_const *= d;
-    return *this;
-  }
-
-  LinearForm& LinearForm::operator /= (double d) {
-    return *this *= 1/d;
-  }
 
   QuadraticForm::QuadraticForm(const LinearForm& l) :
-    m_linearForm(l),
-    m_coefficients()
+    quadraticCoefficients(),
+    linearForm(l)
+  {
+  }
+
+  QuadraticForm::QuadraticForm(const Variable& v) :
+    quadraticCoefficients(),
+    linearForm(v)
   {
   }
 
   QuadraticForm::QuadraticForm(double d) :
-    m_linearForm(d),
-    m_coefficients()
+    quadraticCoefficients(),
+    linearForm(d)
   {
   }
 
   QuadraticForm::QuadraticForm(const LinearForm& l, const LinearForm& r) :
-    m_linearForm(l.getConstant() * r + r.getConstant() * l - l.getConstant() * r.getConstant()),
-    m_coefficients()
+    quadraticCoefficients(),
+    linearForm(l.constantCoefficient * r + r.constantCoefficient * l - l.constantCoefficient * r.constantCoefficient)
   {
-    foreach(LinearForm::Coefficient lc, l.getCoefficients()) {
-      foreach(LinearForm::Coefficient rc, r.getCoefficients()) {
-        m_coefficients[std::minmax(lc.first, rc.first)] += lc.second * rc.second;
+    foreach(auto lc, l.linearCoefficients) {
+      foreach(auto rc, r.linearCoefficients) {
+        quadraticCoefficients[std::minmax(lc.first, rc.first)] += lc.second * rc.second;
       }
     }
   }
 
-  const QuadraticForm::Coefficients& QuadraticForm::getCoefficients() const {
-    return m_coefficients;
+  std::set<Variable> QuadraticForm::getVariables() const {
+    std::set<Variable> variables = linearForm.getVariables();
+    foreach(auto c, quadraticCoefficients) {
+      variables.insert(c.first.first);
+      variables.insert(c.first.second);
+    }
+    return variables;
   }
 
-  double QuadraticForm::getCoefficient(const Variable& v1, const Variable& v2) const {
-    auto it = m_coefficients.find(std::minmax(v1, v2));
-    if (it == m_coefficients.end()) {
+  double QuadraticForm::getQuadraticCoefficient(const Variable& v1, const Variable& v2) const {
+    auto it = quadraticCoefficients.find(std::minmax(v1, v2));
+    if (it == quadraticCoefficients.end()) {
       return 0;
     } else {
       return it->second;
     }
   }
 
-  const LinearForm& QuadraticForm::getLinearForm() const {
-    return m_linearForm;
+  double QuadraticForm::getLinearCoefficient(const Variable& v) const {
+    return linearForm.getLinearCoefficient(v);
+  }
+
+  double QuadraticForm::getConstantCoefficient() const {
+    return linearForm.getConstantCoefficient();
   }
 
   QuadraticForm& QuadraticForm::operator += (const QuadraticForm& other) {
-    foreach(Coefficient c, other.m_coefficients) {
-      m_coefficients[c.first] += c.second;
+    foreach(auto c, other.quadraticCoefficients) {
+      quadraticCoefficients[c.first] += c.second;
     }
-    m_linearForm += other.m_linearForm;
+    linearForm += other.linearForm;
     return *this;
   }
 
@@ -191,10 +206,10 @@ namespace QP {
   }
 
   QuadraticForm& QuadraticForm::operator *= (double d) {
-    foreach(Coefficient c, m_coefficients) {
-      m_coefficients[c.first] *= d;
+    foreach(auto c, quadraticCoefficients) {
+      quadraticCoefficients[c.first] *= d;
     }
-    m_linearForm *= d;
+    linearForm *= d;
     return *this;
   }
 
@@ -202,39 +217,37 @@ namespace QP {
     return *this *= 1/d;
   }
 
-  QuadraticForm QuadraticForm::operator - () const {
-    QuadraticForm l(*this);
-    l *= -1;
-    return l;
+  QuadraticForm operator - (const QuadraticForm& q) {
+    return q * -1;
   }
 
-  QuadraticForm QuadraticForm::operator + () const {
-    return QuadraticForm(*this);
+  QuadraticForm operator + (const QuadraticForm& q) {
+    return q;
   }
 
-  Constraint::Constraint(const LinearForm& l, bool isEquality) :
-    m_linearForm(l),
-    m_isEquality(isEquality)
+  Constraint::Constraint(const LinearForm& linearForm_, Type type_) :
+    linearForm(linearForm_),
+    type(type_)
   {
   }
 
   Constraint operator == (const LinearForm& l, const LinearForm& r) {
-    return Constraint(l - r, true);
+    return Constraint(l - r, Constraint::ZERO);
   }
 
   Constraint operator >= (const LinearForm& l, const LinearForm& r) {
-    return Constraint(l - r, false);
+    return Constraint(l - r, Constraint::POSITIVE);
   }
 
   Constraint operator <= (const LinearForm& l, const LinearForm& r) {
-    return Constraint(r - l, false);
+    return Constraint(r - l, Constraint::POSITIVE);
   }
 
   const LinearForm& Constraint::getLinearForm() const {
-    return m_linearForm;
+    return linearForm;
   }
 
-  bool Constraint::isEquality() const {
-    return m_isEquality;
+  Constraint::Type Constraint::getType() const {
+    return type;
   }
 }
