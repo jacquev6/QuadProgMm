@@ -92,10 +92,12 @@ Translation translate(const QuadraticForm& q, const std::vector<Constraint>& con
 
   t.baseCost += l.getConstant();
 
-  int index = 0;
+  int indexE = 0;
+  int indexI = 0;
   foreach(Constraint c, constraints) {
     quadprogpp::Matrix<double>& C = c.isEquality() ? t.CE : t.CI;
     quadprogpp::Vector<double>& C0 = c.isEquality() ? t.CE0 : t.CI0;
+    int& index = c.isEquality() ? indexE : indexI;
 
     const LinearForm& l = c.getLinearForm();
     foreach(auto it, t.variables.left) {

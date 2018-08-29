@@ -139,6 +139,29 @@ auto d2(Variable left, Variable right, float l0) {
   return d * d;
 }
 
+BOOST_AUTO_TEST_CASE(MixedConstraints) {
+  Variable a, b, c;
+
+  Translation t = translate(0, {
+    a == 1,
+    a <= 4,
+    b >= 8,
+    a >= 7,
+    b == 2,
+    c >= 9,
+    b <= 5,
+    c <= 6,
+  });
+
+  CHECK_SIZES(t);
+
+  CHECK_MATRIX(t.CE, std::vector<std::vector<double>>({{1, 0}, {0, 1}, {0, 0}}));
+  CHECK_VECTOR(t.CE0, std::vector<double>({-1, -2}));
+
+  CHECK_MATRIX(t.CI, std::vector<std::vector<double>>({{-1, 0, 1, 0, 0, 0}, {0, 1, 0, 0, -1, 0}, {0, 0, 0, 1, 0, -1}}));
+  CHECK_VECTOR(t.CI0, std::vector<double>({4, -8, -7, -9, 5, 6}));
+}
+
 BOOST_AUTO_TEST_CASE(SpringChainExample) {
   Variable x0, x1, x2, x3, x4;
   Translation t = translate(
