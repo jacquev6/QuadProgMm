@@ -34,27 +34,27 @@ namespace QP {
       }
     }
 
-    t.n = t.variables.size();
-    t.p = equalityConstraints;
-    t.m = inequalityConstraints;
+    int n = t.variables.size();
+    int p = equalityConstraints;
+    int m = inequalityConstraints;
 
-    t.G.resize(t.n, t.n);
-    t.G0.resize(t.n);
-    t.CE.resize(t.n, t.p);
-    t.CE0.resize(t.p);
-    t.CI.resize(t.n, t.m);
-    t.CI0.resize(t.m);
+    t.G.resize(n, n);
+    t.G0.resize(n);
+    t.CE.resize(n, p);
+    t.CE0.resize(p);
+    t.CI.resize(n, m);
+    t.CI0.resize(m);
 
-    for(int i = 0; i < t.n; ++i) {
-      for(int j = 0; j < t.n; ++j) {
+    for(int i = 0; i < n; ++i) {
+      for(int j = 0; j < n; ++j) {
         t.G0[j] = 0;
         t.G[i][j] = 0;
       }
-      for(int j = 0; j < t.p; ++j) {
+      for(int j = 0; j < p; ++j) {
         t.CE0[j] = 0;
         t.CE[i][j] = 0;
       }
-      for(int j = 0; j < t.m; ++j) {
+      for(int j = 0; j < m; ++j) {
         t.CI0[j] = 0;
         t.CI[i][j] = 0;
       }

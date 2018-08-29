@@ -6,15 +6,12 @@
 using namespace QP;
 
 #define CHECK_SIZES(t) do { \
-  BOOST_CHECK_EQUAL(t.G.nrows(), t.n); \
-  BOOST_CHECK_EQUAL(t.G.ncols(), t.n); \
-  BOOST_CHECK_EQUAL(t.G0.size(), t.n); \
-  BOOST_CHECK_EQUAL(t.CE.nrows(), t.n); \
-  BOOST_CHECK_EQUAL(t.CE.ncols(), t.p); \
-  BOOST_CHECK_EQUAL(t.CE0.size(), t.p); \
-  BOOST_CHECK_EQUAL(t.CI.nrows(), t.n); \
-  BOOST_CHECK_EQUAL(t.CI.ncols(), t.m); \
-  BOOST_CHECK_EQUAL(t.CI0.size(), t.m); \
+  BOOST_CHECK_EQUAL(t.G.ncols(), t.G.nrows()); \
+  BOOST_CHECK_EQUAL(t.G0.size(), t.G.nrows()); \
+  BOOST_CHECK_EQUAL(t.CE.nrows(), t.G.nrows()); \
+  BOOST_CHECK_EQUAL(t.CE0.size(), t.CE.ncols()); \
+  BOOST_CHECK_EQUAL(t.CI.nrows(), t.G.nrows()); \
+  BOOST_CHECK_EQUAL(t.CI0.size(), t.CI.ncols()); \
 } while(false)
 
 #define CHECK_MATRIX(actual, expected) do { \

@@ -38,7 +38,6 @@ namespace QP {
     */
     std::vector<std::pair<Variable, int>> variables;
     double baseCost;
-    int n, m, p;
     quadprogpp::Matrix<double> G, CE, CI;
     quadprogpp::Vector<double> G0, CE0, CI0;
   };
