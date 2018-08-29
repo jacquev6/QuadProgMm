@@ -13,7 +13,6 @@ namespace QP {
     Translation t = translate(q, constraints);
 
     quadprogpp::Vector<double> x;
-
     double cost = quadprogpp::solve_quadprog(t.G, t.g0, t.CE, t.ce0, t.CI, t.ci0, x);
 
     std::map<Variable, double> values;

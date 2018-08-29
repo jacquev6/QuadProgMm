@@ -15,31 +15,18 @@
 
 namespace QP {
   struct Translation {
-    /* From QuadProg++:
-
-    The problem is in the form:
-
-    min 0.5 * x G x + g0 x
-    s.t.
-        CE^T x + ce0 = 0
-        CI^T x + ci0 >= 0
-
-     The matrix and vectors dimensions are as follows:
-         G: n * n
-        g0: n
-
-        CE: n * p
-       ce0: p
-
-        CI: n * m
-       ci0: m
-
-         x: n
-    */
+    Translation(const std::set<Variable>&, int p, int m);
     std::vector<Variable> variables;
-    quadprogpp::Matrix<double> G, CE, CI;
-    quadprogpp::Vector<double> g0, ce0, ci0;
+    quadprogpp::Matrix<double> G;
+    quadprogpp::Vector<double> g0;
     double g00;
+    quadprogpp::Matrix<double> CE;
+    quadprogpp::Vector<double> ce0;
+    quadprogpp::Matrix<double> CI;
+    quadprogpp::Vector<double> ci0;
+
+    private:
+      Translation(const std::vector<Variable>&, int n, int p, int m);
   };
 
   Translation translate(const QuadraticForm&, const std::vector<Constraint>&);

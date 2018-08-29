@@ -6,114 +6,127 @@
 #define foreach BOOST_FOREACH
 
 namespace QP {
+  /* From QuadProg++:
+
+  The problem is in the form:
+
+  min 0.5 * x G x + g0 x
+  s.t.
+      CE^T x + ce0 = 0
+      CI^T x + ci0 >= 0
+
+   The matrix and vectors dimensions are as follows:
+       G: n * n
+      g0: n
+
+      CE: n * p
+     ce0: p
+
+      CI: n * m
+     ci0: m
+
+       x: n
+  */
+  Translation::Translation(const std::set<Variable>& variables_, int p, int m) :
+    Translation(
+      std::vector<Variable>(variables_.begin(), variables_.end()),
+      variables_.size(),
+      p,
+      m
+    )
+  {}
+
+  Translation::Translation(const std::vector<Variable>& variables_, int n, int p, int m) :
+    variables(variables_),
+    G(n, n), g0(n), g00(0),
+    CE(n, p), ce0(p),
+    CI(n, m), ci0(m)
+  {}
+
+  void translate(
+    const std::vector<Variable>& variables,
+    const QuadraticForm& q,
+    quadprogpp::Matrix<double>& G,
+    quadprogpp::Vector<double>& g0,
+    double& g00
+  ) {
+    int index1 = 0;
+    foreach(Variable v1, variables) {
+      int index2 = 0;
+      foreach(Variable v2, variables) {
+        const double coeff = q.getQuadraticCoefficient(v1, v2);
+        if (index1 == index2) {
+          G[index1][index1] = 2 * coeff;
+        } else {
+          G[index1][index2] = coeff;
+          G[index2][index1] = coeff;
+        }
+        ++index2;
+      }
+      ++index1;
+    }
+
+    int index = 0;
+    foreach(Variable v, variables) {
+      g0[index] = q.getLinearCoefficient(v);
+      ++index;
+    }
+
+    g00 = q.getConstantCoefficient();
+  }
+
+  void translate(
+    const std::vector<Variable>& variables,
+    const LinearForm& l,
+    quadprogpp::Matrix<double>& CIE,
+    quadprogpp::Vector<double>& cie0,
+    int indexIE
+  ) {
+    int index = 0;
+    foreach(Variable v, variables) {
+      CIE[index][indexIE] = l.getLinearCoefficient(v);
+      ++index;
+    }
+
+    cie0[indexIE] = l.getConstantCoefficient();
+  }
+
   Translation translate(const QuadraticForm& q, const std::vector<Constraint>& constraints) {
-    Translation t;
-
-    int equalityConstraints = 0;
-    int inequalityConstraints = 0;
-
-    std::set<Variable> allVariables = q.getVariables();
+    int p = 0;
+    int m = 0;
+    std::set<Variable> variables = q.getVariables();
     foreach(Constraint c, constraints) {
       switch(c.getType()) {
         case Constraint::ZERO:
-          ++equalityConstraints;
+          ++p;
           break;
         case Constraint::POSITIVE:
-          ++inequalityConstraints;
+          ++m;
           break;
       }
       const std::set<Variable> constraintVariables = c.getLinearForm().getVariables();
-      allVariables.insert(constraintVariables.begin(), constraintVariables.end());
+      variables.insert(constraintVariables.begin(), constraintVariables.end());
     }
 
-    t.variables = std::vector<Variable>(allVariables.begin(), allVariables.end());
+    Translation t(variables, p, m);
 
-    int n = t.variables.size();
-    int p = equalityConstraints;
-    int m = inequalityConstraints;
-
-    t.G.resize(n, n);
-    t.g0.resize(n);
-    t.CE.resize(n, p);
-    t.ce0.resize(p);
-    t.CI.resize(n, m);
-    t.ci0.resize(m);
-
-    for(int i = 0; i < n; ++i) {
-      for(int j = 0; j < n; ++j) {
-        t.g0[j] = 0;
-        t.G[i][j] = 0;
-      }
-      for(int j = 0; j < p; ++j) {
-        t.ce0[j] = 0;
-        t.CE[i][j] = 0;
-      }
-      for(int j = 0; j < m; ++j) {
-        t.ci0[j] = 0;
-        t.CI[i][j] = 0;
-      }
-    }
-
-    t.g00 = 0;
-
-    {
-      int index1 = 0;
-      foreach(Variable v1, t.variables) {
-        int index2 = 0;
-        foreach(Variable v2, t.variables) {
-          const double coeff = q.getQuadraticCoefficient(v1, v2);
-          if (index1 == index2) {
-            t.G[index1][index1] = 2 * coeff;
-          } else {
-            t.G[index1][index2] = coeff;
-            t.G[index2][index1] = coeff;
-          }
-          ++index2;
-        }
-        ++index1;
-      }
-    }
-
-    {
-      int index = 0;
-      foreach(Variable v, t.variables) {
-        t.g0[index] = q.getLinearCoefficient(v);
-        ++index;
-      }
-    }
-
-    t.g00 += q.getConstantCoefficient();
+    translate(t.variables, q, t.G, t.g0, t.g00);
 
     int indexE = 0;
     int indexI = 0;
     foreach(Constraint c, constraints) {
-      quadprogpp::Matrix<double>* CIE;
-      quadprogpp::Vector<double>* cie0;
-      int* indexIE;
+      const LinearForm& l = c.getLinearForm();
+
       switch(c.getType()) {
         case Constraint::ZERO:
-          CIE = &t.CE;
-          cie0 = &t.ce0;
-          indexIE = &indexE;
+          translate(t.variables, l, t.CE, t.ce0, indexE);
+          ++indexE;
           break;
         case Constraint::POSITIVE:
-          CIE = &t.CI;
-          cie0 = &t.ci0;
-          indexIE = &indexI;
+          translate(t.variables, l, t.CI, t.ci0, indexI);
+          ++indexI;
           break;
       }
-
-      const LinearForm& l = c.getLinearForm();
-      {
-        int index = 0;
-        foreach(Variable v, t.variables) {
-          (*CIE)[index][*indexIE] = l.getLinearCoefficient(v);
-          ++index;
-        }
-      }
-
-      (*cie0)[*indexIE] = l.getConstantCoefficient();
-      ++(*indexIE);
     }
 
     return t;
