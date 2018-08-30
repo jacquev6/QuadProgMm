@@ -16,8 +16,8 @@ void expect_constraint_(const Constraint&) {}
 BOOST_AUTO_TEST_CASE(Conversions) {
   double d = 0;
   Variable v;
-  LinearForm l = 0;
-  QuadraticForm q = 0;
+  LinearForm l;
+  QuadraticForm q;
 
   EXPECT_LINEAR_FORM(d);
   EXPECT_LINEAR_FORM(v);
@@ -47,8 +47,8 @@ BOOST_AUTO_TEST_CASE(Conversions) {
 
 BOOST_AUTO_TEST_CASE(UnarySignOperators) {
   Variable v;
-  LinearForm l = 0;
-  QuadraticForm q = 0;
+  LinearForm l;
+  QuadraticForm q;
 
   EXPECT_LINEAR_FORM(+v);
   EXPECT_LINEAR_FORM(-v);
@@ -61,8 +61,8 @@ BOOST_AUTO_TEST_CASE(UnarySignOperators) {
 BOOST_AUTO_TEST_CASE(AdditionOperators) {
   double d = 0;
   Variable v;
-  LinearForm l = 0;
-  QuadraticForm q = 0;
+  LinearForm l;
+  QuadraticForm q;
 
   // N/A: d d
   // d v
@@ -148,8 +148,8 @@ BOOST_AUTO_TEST_CASE(AdditionOperators) {
 BOOST_AUTO_TEST_CASE(MultiplicationOperators) {
   double d = 0;
   Variable v;
-  LinearForm l = 0;
-  QuadraticForm q = 0;
+  LinearForm l;
+  QuadraticForm q;
 
   // N/A: d d
   // d v
@@ -235,7 +235,7 @@ BOOST_AUTO_TEST_CASE(MultiplicationOperators) {
 BOOST_AUTO_TEST_CASE(ComparisonOperators) {
   double d = 0;
   Variable v;
-  LinearForm l = 0;
+  LinearForm l;
 
   // N/A: d d
   // d v

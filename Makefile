@@ -1,6 +1,6 @@
 FLAGS=-Wall -Werror -pedantic
 
-build/depend: src/QP/*.cpp src/QP/*.hpp
+build/depend: src/QP/*.cpp src/QP/*.hpp src/QP/*-test.cc
 	@mkdir -p build
 	g++ $(FLAGS) -IQuadProgpp/src -MM $^ | sed "s|\(.*\):|build/\1:|" >$@
 
