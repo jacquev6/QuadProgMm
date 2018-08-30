@@ -1,13 +1,13 @@
-#ifndef QP_QP_hpp
-#define QP_QP_hpp
+#ifndef QuadProgMm_QuadProgMm_hpp
+#define QuadProgMm_QuadProgMm_hpp
 
 // Standard library
 #include <vector>
 
-// QP
+// QuadProgMm
 #include "Forms.hpp"
 
-namespace QP {
+namespace QuadProgMm {
   class Solution {
     public:
       double getCost() const {

@@ -5,7 +5,7 @@
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
 
-namespace QP {
+namespace QuadProgMm {
   /* From QuadProg++:
 
   The problem is in the form:

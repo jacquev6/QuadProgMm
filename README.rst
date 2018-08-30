@@ -28,21 +28,23 @@ Clone and build::
 Start with Includes::
 
     #include <iostream>
-    #include <QP/QP.hpp>
+    #include <QuadProgMm.hpp>
+
+    using namespace QuadProgMm;
 
     int main() {
 
 Create variables::
 
-      QP::Variable a, b, c;
+      Variable a, b, c;
 
 And a quadratic form to optimize::
 
-      QP::QuadraticForm q = a + b + (a - b) * (a - b) + c + (b - c) * (b - c);
+      QuadraticForm q = a + b + (a - b) * (a - b) + c + (b - c) * (b - c);
 
 And constraints::
 
-      std::vector<QP::Constraint> constraints {
+      std::vector<Constraint> constraints {
         a <= 1,
         c >= 4,
         a - 2 * b <= 12,
@@ -50,7 +52,7 @@ And constraints::
 
 Finally, solve::
 
-      QP::Solution solution = QP::minimize(q, constraints);
+      Solution solution = minimize(q, constraints);
 
       std::cout << "a: " << solution.get(a) << std::endl;
       std::cout << "b: " << solution.get(b) << std::endl;

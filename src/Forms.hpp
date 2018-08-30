@@ -1,5 +1,5 @@
-#ifndef QP_Forms_hpp
-#define QP_Forms_hpp
+#ifndef QuadProgMm_Forms_hpp
+#define QuadProgMm_Forms_hpp
 
 // Standard library
 #include <map>
@@ -8,7 +8,7 @@
 // Boost
 #include <boost/operators.hpp>
 
-namespace QP {
+namespace QuadProgMm {
   struct Variable {
     Variable();
 
@@ -91,7 +91,7 @@ namespace QP {
   };
 }
 
-namespace QP {
+namespace QuadProgMm {
   LinearForm operator + (const Variable&);
   LinearForm operator + (const LinearForm&);
   QuadraticForm operator + (const QuadraticForm&);

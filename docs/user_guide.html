@@ -41,24 +41,24 @@
 <p>Quadratic problems aim at optimizing a quadratic form of several variables,
 subject to linear constraints on these variables.</p>
 <p>So, let’s start with variables:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">Variable</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Variable</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>This defines four instances representing the variables of your QP problem.
 Solving your quadratic problem means finding values for these variables.
-Once the problem is solved, these values can be retrieved using <code class="docutils literal notranslate"><span class="pre">QP::Variable::getValue</span></code> (see below).</p>
-<p>It is your responsibility to ensure that variables are utlimately only used by a single call to <code class="docutils literal notranslate"><span class="pre">QP::solve</span></code>.
+Once the problem is solved, these values can be retrieved using <code class="docutils literal notranslate"><span class="pre">Variable::getValue</span></code> (see below).</p>
+<p>It is your responsibility to ensure that variables are utlimately only used by a single call to <code class="docutils literal notranslate"><span class="pre">solve</span></code>.
 &#64;todo Maybe change the interface so that this is ensured by the library.</p>
 <p>&#64;todo Variables have pointer semantics</p>
 </div>
 <div class="section" id="linear-and-quadratic-forms">
 <h2>Linear and quadratic forms<a class="headerlink" href="#linear-and-quadratic-forms" title="Permalink to this headline">¶</a></h2>
 <p>Variables can then be combined into linear forms using conventional operators and floating points:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">LinearForm</span> <span class="n">l</span> <span class="o">=</span> <span class="mf">3.5</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">-</span> <span class="n">c</span> <span class="o">/</span> <span class="mf">9.8</span> <span class="o">+</span> <span class="mi">12</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">LinearForm</span> <span class="n">l</span> <span class="o">=</span> <span class="mf">3.5</span> <span class="o">*</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">-</span> <span class="n">c</span> <span class="o">/</span> <span class="mf">9.8</span> <span class="o">+</span> <span class="mi">12</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>All operators producing degree zero or one polynoms are available:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">LinearForm</span><span class="o">&gt;</span> <span class="n">all_linear_forms</span> <span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">LinearForm</span><span class="o">&gt;</span> <span class="n">all_linear_forms</span> <span class="p">{</span>
   <span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span>
   <span class="o">+</span><span class="n">a</span><span class="p">,</span> <span class="o">+</span><span class="n">l</span><span class="p">,</span> <span class="o">-</span><span class="n">a</span><span class="p">,</span> <span class="o">-</span><span class="n">l</span><span class="p">,</span>
   <span class="n">a</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">+</span> <span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">l</span> <span class="o">+</span> <span class="n">l</span><span class="p">,</span>
@@ -69,9 +69,9 @@ Once the problem is solved, these values can be retrieved using <code class="doc
 </pre></div>
 </div>
 <p>Variables and linear forms can be combined into quadratic forms as well:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">QuadraticForm</span> <span class="n">q</span> <span class="o">=</span> <span class="mf">2.3</span> <span class="o">*</span> <span class="n">l</span> <span class="o">*</span> <span class="n">l</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">-</span> <span class="n">d</span> <span class="o">*</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">4</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QuadraticForm</span> <span class="n">q</span> <span class="o">=</span> <span class="mf">2.3</span> <span class="o">*</span> <span class="n">l</span> <span class="o">*</span> <span class="n">l</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">+</span> <span class="n">c</span> <span class="o">-</span> <span class="n">d</span> <span class="o">*</span> <span class="n">l</span> <span class="o">+</span> <span class="mi">4</span><span class="p">;</span>
 
-<span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">QuadraticForm</span><span class="o">&gt;</span> <span class="n">all_quadratic_forms</span> <span class="p">{</span>
+<span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QuadraticForm</span><span class="o">&gt;</span> <span class="n">all_quadratic_forms</span> <span class="p">{</span>
   <span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span>
   <span class="n">a</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="p">,</span>
   <span class="o">+</span><span class="n">q</span><span class="p">,</span> <span class="o">-</span><span class="n">q</span><span class="p">,</span>

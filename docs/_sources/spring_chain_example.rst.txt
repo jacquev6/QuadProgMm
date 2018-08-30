@@ -11,7 +11,9 @@ Let's say that you want to compute the balance positions of a chain of springs.
 Start with includes::
 
     #include <iostream>
-    #include <QP/QP.hpp>
+    #include <QuadProgMm.hpp>
+
+    using namespace QuadProgMm;
 
 Define a class representing a spring.
 It's a simple aggregate with the spring's strength, and unconstrained length::
@@ -28,7 +30,7 @@ It's a simple aggregate with the spring's strength, and unconstrained length::
 
 Then, a class for the chain.
 It has two boundaries (``left`` and ``right``),
-a vector of ``Spring``, and a vector of ``QP::Variable`` for the positions to be computed::
+a vector of ``Spring``, and a vector of ``Variable`` for the positions to be computed::
 
     class SpringChain {
     public:
@@ -48,41 +50,41 @@ a vector of ``Spring``, and a vector of ``QP::Variable`` for the positions to be
       }
 
     private:
-      static std::vector<QP::Variable> makePositions(
+      static std::vector<Variable> makePositions(
         const std::vector<Spring>& springs
       ) {
-        std::vector<QP::Variable> positions;
+        std::vector<Variable> positions;
         for(size_t i = 0; i != springs.size() + 1; ++i) {
-          positions.push_back(QP::Variable());
+          positions.push_back(Variable());
         }
         return positions;
       }
 
-      QP::Solution resolve();
+      Solution resolve();
 
     private:
       float left, right;
       std::vector<Spring> springs;
-      std::vector<QP::Variable> positions;
-      QP::Solution solution;
+      std::vector<Variable> positions;
+      Solution solution;
     };
 
-``makePositions`` is required because ``QP::Variable`` has a pointer semantic:
-when a ``QP::Variable`` is copied, the copy refers to the same resolvable entity as the original.
-That's why an original ``QP::Variable`` instance is required for each position to compute.
+``makePositions`` is required because ``Variable`` has a pointer semantic:
+when a ``Variable`` is copied, the copy refers to the same resolvable entity as the original.
+That's why an original ``Variable`` instance is required for each position to compute.
 
 Then, the most important part: the definition of ``SpringChain::resolve``::
 
-    QP::Solution SpringChain::resolve() {
+    Solution SpringChain::resolve() {
 
 First, define the objective: each spring has a `potential energy <https://en.wikipedia.org/wiki/Elastic_energy>`_ of \\(1/2 \\cdot k \\cdot (l - l_0) ^ 2\\),
 where \\(k\\) is its strength, \\(l_0\\) is its unconstrained length, and \\(l\\) is its current length.
 The balance position is reached when the total energy is minimal: the objective is to minimize the sum of all those energies.
 So, build the total energy as a quadratic form of the variables::
 
-      QP::QuadraticForm energy = 0;
+      QuadraticForm energy = 0;
       for(size_t i = 0; i != springs.size(); ++i) {
-        QP::LinearForm l_minus_l0 =
+        LinearForm l_minus_l0 =
           positions[i + 1] - positions[i]
           - springs[i].length;
 
@@ -91,14 +93,14 @@ So, build the total energy as a quadratic form of the variables::
 
 Add the constraints on boundaries::
 
-      std::vector<QP::Constraint> boundaries {
+      std::vector<Constraint> boundaries {
         positions.front() == left,
         positions.back() == right,
       };
 
 And solve the QP problem::
 
-      return QP::minimize(energy, boundaries);
+      return minimize(energy, boundaries);
     }
 
 Finally, use the ``SpringChain`` class::

@@ -57,21 +57,23 @@ $ make lib
 </div>
 <p>Start with Includes:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;iostream&gt;</span>
-<span class="c1">#include &lt;QP/QP.hpp&gt;</span>
+<span class="c1">#include &lt;QuadProgMm.hpp&gt;</span>
+
+<span class="n">using</span> <span class="n">namespace</span> <span class="n">QuadProgMm</span><span class="p">;</span>
 
 <span class="nb">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
 </pre></div>
 </div>
 <p>Create variables:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">Variable</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Variable</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>And a quadratic form to optimize:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QP</span><span class="p">::</span><span class="n">QuadraticForm</span> <span class="n">q</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QuadraticForm</span> <span class="n">q</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">c</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>And constraints:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">QP</span><span class="p">::</span><span class="n">Constraint</span><span class="o">&gt;</span> <span class="n">constraints</span> <span class="p">{</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Constraint</span><span class="o">&gt;</span> <span class="n">constraints</span> <span class="p">{</span>
   <span class="n">a</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span>
   <span class="n">c</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">,</span>
   <span class="n">a</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">b</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">,</span>
@@ -79,7 +81,7 @@ $ make lib
 </pre></div>
 </div>
 <p>Finally, solve:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">QP</span><span class="p">::</span><span class="n">Solution</span> <span class="n">solution</span> <span class="o">=</span> <span class="n">QP</span><span class="p">::</span><span class="n">minimize</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">constraints</span><span class="p">);</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">Solution</span> <span class="n">solution</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">constraints</span><span class="p">);</span>
 
   <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;a: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>
   <span class="n">std</span><span class="p">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;b: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="p">::</span><span class="n">endl</span><span class="p">;</span>

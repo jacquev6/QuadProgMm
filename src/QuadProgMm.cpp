@@ -1,14 +1,14 @@
 // Header
-#include "QP.hpp"
+#include "QuadProgMm.hpp"
 
 // Boost
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
 
-// QP
+// QuadProgMm
 #include "Translate.hpp"
 
-namespace QP {
+namespace QuadProgMm {
   Solution minimize(const QuadraticForm& q, const std::vector<Constraint>& constraints) {
     Translation t = translate(q, constraints);
 

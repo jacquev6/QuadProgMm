@@ -3,7 +3,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "Forms.hpp"
-using namespace QP;
+using namespace QuadProgMm;
 
 void expect_linear_form_(const LinearForm&) {}
 void expect_quadratic_form_(const QuadraticForm&) {}

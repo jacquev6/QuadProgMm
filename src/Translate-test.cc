@@ -3,7 +3,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include "Translate.hpp"
-using namespace QP;
+using namespace QuadProgMm;
 
 #define CHECK_SIZES(t) do { \
   BOOST_CHECK_EQUAL(t.variables.size(), t.G.nrows()); \

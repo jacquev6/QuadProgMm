@@ -2,8 +2,8 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
-#include "QP.hpp"
-using namespace QP;
+#include "QuadProgMm.hpp"
+using namespace QuadProgMm;
 
 BOOST_AUTO_TEST_CASE(OneVariableNoConstraint) {
   Variable a;

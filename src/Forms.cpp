@@ -9,7 +9,7 @@
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
 
-namespace QP {
+namespace QuadProgMm {
   int Variable::nextId = 0;
 
   Variable::Variable() : id(++nextId) {}
@@ -183,7 +183,7 @@ namespace QP {
   Constraint::Type Constraint::getType() const {return type;}
 }
 
-namespace QP {
+namespace QuadProgMm {
   LinearForm operator + (const Variable& v) {return v;}
   LinearForm operator + (const LinearForm& l) {return l;}
   QuadraticForm operator + (const QuadraticForm& q) {return q;}

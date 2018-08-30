@@ -1,5 +1,5 @@
-#ifndef QP_Translate_hpp
-#define QP_Translate_hpp
+#ifndef QuadProgMm_Translate_hpp
+#define QuadProgMm_Translate_hpp
 
 // Standard library
 #include <vector>
@@ -10,10 +10,10 @@
 #undef inverse
 #undef solve
 
-// QP
+// QuadProgMm
 #include "Forms.hpp"
 
-namespace QP {
+namespace QuadProgMm {
   struct Translation {
     Translation(const std::set<Variable>&, int p, int m);
     std::vector<Variable> variables;
