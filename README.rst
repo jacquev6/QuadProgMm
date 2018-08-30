@@ -1,12 +1,14 @@
 Introduction
 ============
 
-`Quadratic programming <http://en.wikipedia.org/wiki/Quadratic_programming>`_ problems are generally specified
-using matrices and vectors, because it is the generic mathematical form used by resolution algorithms.
-*QuadProgMm* is a C++ library providing a domain specific language to specify them as literal C++ equations on named variables.
+*QuadProgMm* is a C++ library providing a domain specific language to express
+`Quadratic programming <http://en.wikipedia.org/wiki/Quadratic_programming>`_ problems as literal C++ equations on named variables.
 
-Note that *QuadProgMm* does *not* implement the arguably complex algorithms for solving these problems
-and delegates all the hard work to `QuadProg++ <https://github.com/liuq/QuadProgpp>`_, by Luca Di Gaspero.
+These problems are generally specified using matrices and vectors, because it is the generic mathematical form used by resolution algorithms.
+This is sometime tedius, and *QuadProgMm* tries to fix that.
+
+Note that *QuadProgMm* does *not* implement the arguably complex linear algebra algorithms for solving these problems
+and delegates all that hard work to `QuadProg++ <https://github.com/liuq/QuadProgpp>`_, by Luca Di Gaspero.
 
 It's licensed under the `MIT license <http://choosealicense.com/licenses/mit/>`__.
 Its `documentation <http://jacquev6.github.io/QuadProgMm>`__

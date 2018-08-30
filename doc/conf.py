@@ -15,6 +15,7 @@ copyright = ('2010-2018 {} <script>var jacquev6_ribbon_github="{}"</script>'.for
 primary_domain = "cpp"
 nitpicky = True
 nitpick_ignore = [
+    ("cpp:identifier", "QuadProgMm"),  # This is weird
     ("cpp:identifier", "boost"),
     ("cpp:identifier", "boost::addable<LinearExpression>"),
     ("cpp:identifier", "boost::addable<QuadraticExpression>"),

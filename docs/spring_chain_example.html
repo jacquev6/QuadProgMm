@@ -49,19 +49,16 @@ It’s a simple aggregate with the spring’s strength, and unconstrained length
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">Spring</span> <span class="p">{</span>
   <span class="n">Spring</span><span class="p">(</span><span class="nb">float</span> <span class="n">strength_</span><span class="p">,</span> <span class="nb">float</span> <span class="n">length_</span><span class="p">)</span> <span class="p">:</span>
     <span class="n">strength</span><span class="p">(</span><span class="n">strength_</span><span class="p">),</span> <span class="n">length</span><span class="p">(</span><span class="n">length_</span><span class="p">)</span>
-  <span class="p">{</span>
-  <span class="p">}</span>
+  <span class="p">{}</span>
 
-  <span class="nb">float</span> <span class="n">strength</span><span class="p">;</span>
-  <span class="nb">float</span> <span class="n">length</span><span class="p">;</span>
+  <span class="nb">float</span> <span class="n">strength</span><span class="p">,</span> <span class="n">length</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
 </div>
 <p>Then, a class for the chain.
 It has two boundaries (<code class="docutils literal notranslate"><span class="pre">left</span></code> and <code class="docutils literal notranslate"><span class="pre">right</span></code>),
 a vector of <code class="docutils literal notranslate"><span class="pre">Spring</span></code>, and a vector of <a class="reference internal" href="reference.html#_CPPv3N10QuadProgMm8VariableE" title="QuadProgMm::Variable"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Variable</span></code></a> for the positions to be computed:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SpringChain</span> <span class="p">{</span>
-<span class="n">public</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">struct</span> <span class="n">SpringChain</span> <span class="p">{</span>
   <span class="n">SpringChain</span><span class="p">(</span>
     <span class="nb">float</span> <span class="n">left_</span><span class="p">,</span> <span class="nb">float</span> <span class="n">right_</span><span class="p">,</span>
     <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Spring</span><span class="o">&gt;&amp;</span> <span class="n">springs_</span>
@@ -70,43 +67,44 @@ a vector of <code class="docutils literal notranslate"><span class="pre">Spring<
     <span class="n">springs</span><span class="p">(</span><span class="n">springs_</span><span class="p">),</span>
     <span class="n">positions</span><span class="p">(</span><span class="n">makePositions</span><span class="p">(</span><span class="n">springs_</span><span class="p">)),</span>
     <span class="n">solution</span><span class="p">(</span><span class="n">resolve</span><span class="p">())</span>
-  <span class="p">{</span>
-  <span class="p">}</span>
+  <span class="p">{}</span>
 
   <span class="n">double</span> <span class="n">get</span><span class="p">(</span><span class="n">size_t</span> <span class="n">i</span><span class="p">)</span> <span class="n">const</span> <span class="p">{</span>
     <span class="k">return</span> <span class="n">solution</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
   <span class="p">}</span>
 
-<span class="n">private</span><span class="p">:</span>
-  <span class="n">static</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Variable</span><span class="o">&gt;</span> <span class="n">makePositions</span><span class="p">(</span>
-    <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Spring</span><span class="o">&gt;&amp;</span> <span class="n">springs</span>
-  <span class="p">)</span> <span class="p">{</span>
+  <span class="n">private</span><span class="p">:</span>
+    <span class="n">static</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Variable</span><span class="o">&gt;</span> <span class="n">makePositions</span><span class="p">(</span>
+      <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Spring</span><span class="o">&gt;&amp;</span>
+    <span class="p">);</span>
+    <span class="n">Solution</span> <span class="n">resolve</span><span class="p">();</span>
+
+    <span class="nb">float</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">;</span>
+    <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Spring</span><span class="o">&gt;</span> <span class="n">springs</span><span class="p">;</span>
     <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Variable</span><span class="o">&gt;</span> <span class="n">positions</span><span class="p">;</span>
-    <span class="k">for</span><span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">springs</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">positions</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Variable</span><span class="p">());</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">positions</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="n">Solution</span> <span class="n">resolve</span><span class="p">();</span>
-
-<span class="n">private</span><span class="p">:</span>
-  <span class="nb">float</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">;</span>
-  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Spring</span><span class="o">&gt;</span> <span class="n">springs</span><span class="p">;</span>
-  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Variable</span><span class="o">&gt;</span> <span class="n">positions</span><span class="p">;</span>
-  <span class="n">Solution</span> <span class="n">solution</span><span class="p">;</span>
+    <span class="n">Solution</span> <span class="n">solution</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">makePositions</span></code> is required because <a class="reference internal" href="reference.html#_CPPv3N10QuadProgMm8VariableE" title="QuadProgMm::Variable"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Variable</span></code></a> has a pointer semantic:
-when a <a class="reference internal" href="reference.html#_CPPv3N10QuadProgMm8VariableE" title="QuadProgMm::Variable"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Variable</span></code></a> is copied, the copy refers to the same resolvable entity as the original.
-That’s why an original <a class="reference internal" href="reference.html#_CPPv3N10QuadProgMm8VariableE" title="QuadProgMm::Variable"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Variable</span></code></a> instance is required for each position to compute.</p>
+<p>Then, the definition of <code class="docutils literal notranslate"><span class="pre">makePositions</span></code> that constructs an independent <a class="reference internal" href="reference.html#_CPPv3N10QuadProgMm8VariableE" title="QuadProgMm::Variable"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Variable</span></code></a>
+for each position to solve:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Variable</span><span class="o">&gt;</span> <span class="n">SpringChain</span><span class="p">::</span><span class="n">makePositions</span><span class="p">(</span>
+  <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Spring</span><span class="o">&gt;&amp;</span> <span class="n">springs</span>
+<span class="p">)</span> <span class="p">{</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Variable</span><span class="o">&gt;</span> <span class="n">positions</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">springs</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">positions</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Variable</span><span class="p">());</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="n">positions</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 <p>Then, the most important part: the definition of <code class="docutils literal notranslate"><span class="pre">SpringChain::resolve</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Solution</span> <span class="n">SpringChain</span><span class="p">::</span><span class="n">resolve</span><span class="p">()</span> <span class="p">{</span>
 </pre></div>
 </div>
-<p>First, define the objective: each spring has a <a class="reference external" href="https://en.wikipedia.org/wiki/Elastic_energy">potential energy</a> of \(1/2 \cdot k \cdot (l - l_0) ^ 2\),
-where \(k\) is its strength, \(l_0\) is its unconstrained length, and \(l\) is its current length.
+<p>First, define the objective: each spring has a <a class="reference external" href="https://en.wikipedia.org/wiki/Elastic_energy">potential energy</a> of <span class="math notranslate nohighlight">\(1/2 \cdot k \cdot (l - l_0) ^ 2\)</span>,
+where <span class="math notranslate nohighlight">\(k\)</span> is its strength, <span class="math notranslate nohighlight">\(l_0\)</span> is its unconstrained length, and <span class="math notranslate nohighlight">\(l\)</span> is its current length.
 The balance position is reached when the total energy is minimal: the objective is to minimize the sum of all those energies.
 So, build the total energy as a quadratic expression of the variables:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">QuadraticExpression</span> <span class="n">energy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -133,11 +131,12 @@ So, build the total energy as a quadratic expression of the variables:</p>
 </div>
 <p>Finally, use the <code class="docutils literal notranslate"><span class="pre">SpringChain</span></code> class:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Spring</span><span class="o">&gt;</span> <span class="n">springs</span><span class="p">;</span>
-  <span class="n">springs</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Spring</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
-  <span class="n">springs</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Spring</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">));</span>
-  <span class="n">springs</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Spring</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">));</span>
-  <span class="n">springs</span><span class="o">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">Spring</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Spring</span><span class="o">&gt;</span> <span class="n">springs</span> <span class="p">{</span>
+    <span class="n">Spring</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="n">Spring</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="n">Spring</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="n">Spring</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+  <span class="p">};</span>
 
   <span class="n">SpringChain</span> <span class="n">chain</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">springs</span><span class="p">);</span>
   <span class="k">for</span><span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">springs</span><span class="o">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
@@ -155,8 +154,6 @@ So, build the total energy as a quadratic expression of the variables:</p>
 <span class="n">Position</span> <span class="mi">4</span><span class="p">:</span> <span class="mi">10</span>
 </pre></div>
 </div>
-<p>In this example, you have seen the basics of how to express objectives and constraints as arithmetic expressions of C++ variables.
-Dealing with vectors and matrices is the responibility of the library.</p>
 </div>
 
 

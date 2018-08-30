@@ -5,8 +5,7 @@ Spring chain example
 
 Let's say that you want to compute the balance positions of a chain of springs.
 
-.. @todo Add image http://www.physics.utah.edu/~belz/phys3730/lab26/oscillators.png
-.. @todo Add link to full source code
+.. @todo Add image
 
 Start with includes::
 
@@ -21,19 +20,16 @@ It's a simple aggregate with the spring's strength, and unconstrained length::
     struct Spring {
       Spring(float strength_, float length_) :
         strength(strength_), length(length_)
-      {
-      }
+      {}
 
-      float strength;
-      float length;
+      float strength, length;
     };
 
 Then, a class for the chain.
 It has two boundaries (``left`` and ``right``),
 a vector of ``Spring``, and a vector of :class:`Variable <QuadProgMm::Variable>` for the positions to be computed::
 
-    class SpringChain {
-    public:
+    struct SpringChain {
       SpringChain(
         float left_, float right_,
         const std::vector<Spring>& springs_
@@ -42,43 +38,43 @@ a vector of ``Spring``, and a vector of :class:`Variable <QuadProgMm::Variable>`
         springs(springs_),
         positions(makePositions(springs_)),
         solution(resolve())
-      {
-      }
+      {}
 
       double get(size_t i) const {
         return solution.get(positions[i]);
       }
 
-    private:
-      static std::vector<Variable> makePositions(
-        const std::vector<Spring>& springs
-      ) {
+      private:
+        static std::vector<Variable> makePositions(
+          const std::vector<Spring>&
+        );
+        Solution resolve();
+
+        float left, right;
+        std::vector<Spring> springs;
         std::vector<Variable> positions;
-        for(size_t i = 0; i != springs.size() + 1; ++i) {
-          positions.push_back(Variable());
-        }
-        return positions;
-      }
-
-      Solution resolve();
-
-    private:
-      float left, right;
-      std::vector<Spring> springs;
-      std::vector<Variable> positions;
-      Solution solution;
+        Solution solution;
     };
 
-``makePositions`` is required because :class:`Variable <QuadProgMm::Variable>` has a pointer semantic:
-when a :class:`Variable <QuadProgMm::Variable>` is copied, the copy refers to the same resolvable entity as the original.
-That's why an original :class:`Variable <QuadProgMm::Variable>` instance is required for each position to compute.
+Then, the definition of ``makePositions`` that constructs an independent :class:`Variable <QuadProgMm::Variable>`
+for each position to solve::
+
+    std::vector<Variable> SpringChain::makePositions(
+      const std::vector<Spring>& springs
+    ) {
+      std::vector<Variable> positions;
+      for(size_t i = 0; i != springs.size() + 1; ++i) {
+        positions.push_back(Variable());
+      }
+      return positions;
+    }
 
 Then, the most important part: the definition of ``SpringChain::resolve``::
 
     Solution SpringChain::resolve() {
 
-First, define the objective: each spring has a `potential energy <https://en.wikipedia.org/wiki/Elastic_energy>`_ of \\(1/2 \\cdot k \\cdot (l - l_0) ^ 2\\),
-where \\(k\\) is its strength, \\(l_0\\) is its unconstrained length, and \\(l\\) is its current length.
+First, define the objective: each spring has a `potential energy <https://en.wikipedia.org/wiki/Elastic_energy>`_ of :math:`1/2 \cdot k \cdot (l - l_0) ^ 2`,
+where :math:`k` is its strength, :math:`l_0` is its unconstrained length, and :math:`l` is its current length.
 The balance position is reached when the total energy is minimal: the objective is to minimize the sum of all those energies.
 So, build the total energy as a quadratic expression of the variables::
 
@@ -106,11 +102,12 @@ And solve the QP problem::
 Finally, use the ``SpringChain`` class::
 
     int main() {
-      std::vector<Spring> springs;
-      springs.push_back(Spring(1, 2));
-      springs.push_back(Spring(1, 3));
-      springs.push_back(Spring(10, 5));
-      springs.push_back(Spring(1, 2));
+      std::vector<Spring> springs {
+        Spring(1, 2),
+        Spring(1, 3),
+        Spring(10, 5),
+        Spring(1, 2),
+      };
 
       SpringChain chain(0, 10, springs);
       for(size_t i = 0; i != springs.size() + 1; ++i) {
@@ -125,6 +122,3 @@ And here is the result:
 
 .. include:: spring_chain_example.out
     :literal:
-
-In this example, you have seen the basics of how to express objectives and constraints as arithmetic expressions of C++ variables.
-Dealing with vectors and matrices is the responibility of the library.

@@ -9,21 +9,32 @@
 // Boost
 #include <boost/operators.hpp>
 
-//! The namespace
 namespace QuadProgMm {
-  /*! A variable usable in QP problems
+  /*!
+    The representation of a variable usable in QP problems.
 
-  @todoc Pointer-like semantics
+    It is immutable: a Variable instance represents the same variable from its construction to its destruction.
   */
   struct Variable {
-    //! Default constructor
+    /*!
+      Construct a new variable.
+
+      It represents a different variable from all \ref Variable "Variables" created before.
+    */
     Variable();
 
+    /*!
+      Construct a copy of an existing Variable.
+
+      It represents the same variable as the original and is usable interchangably with the original everywhere.
+    */
     Variable(const Variable&) = default;
     Variable& operator = (const Variable&) = delete;
     Variable& operator = (const Variable&&) = delete;
 
-    //! Strict comparison operator, to be able to use Variables in std::maps
+    /*!
+      Strict comparison operator, to be able to use \ref Variable "Variables" in std::maps for example.
+    */
     bool operator < (const Variable& other) const {return id < other.id;}
 
     private:
@@ -31,32 +42,48 @@ namespace QuadProgMm {
       static int nextId;
   };
 
-  //! A degre-1 expression
+  /*!
+    A polynomial of \ref Variable "Variables" of degree 0 or 1.
+  */
   struct LinearExpression :
     boost::addable<LinearExpression>,
     boost::subtractable<LinearExpression>,
     boost::multipliable<LinearExpression, double>,
     boost::dividable<LinearExpression, double>
   {
-    /*! Yup */
+    /*!
+      Construct a polynomial of degree 0, equal to the parameter.
+    */
     LinearExpression(double = 0);
-    /*! Yup */
+
+    /*!
+      Construct a single-variable, unitary, polynomial of degree 1.
+    */
     LinearExpression(const Variable&);
 
-    /*! Yup */
+    /*! 
+      Add another LinearExpression to the current one.
+    */
     LinearExpression& operator += (const LinearExpression&);
-    /*! Yup */
+
+    /*! 
+      Substract another LinearExpression to the current one.
+    */
     LinearExpression& operator -= (const LinearExpression&);
-    /*! Yup */
+
+    /*! 
+      Multiply the current LinearExpression by a constant.
+    */
     LinearExpression& operator *= (double);
-    /*! Yup */
+
+    /*! 
+      Divide the current LinearExpression by a constant.
+    */
     LinearExpression& operator /= (double);
 
-    /*! Yup */
+    // Not part of the public interface of the library
     std::set<Variable> getVariables() const;
-    /*! Yup */
     double getLinearCoefficient(const Variable&) const;
-    /*! Yup */
     double getConstantCoefficient() const;
 
     private:
@@ -66,36 +93,54 @@ namespace QuadProgMm {
       friend class QuadraticExpression;
   };
 
-  //! A degre-2 expression
+  /*!
+    A polynomial of \ref Variable "Variables" of degree 0, 1, or 2.
+  */
   struct QuadraticExpression :
     boost::addable<QuadraticExpression>,
     boost::subtractable<QuadraticExpression>,
     boost::multipliable<QuadraticExpression, double>,
     boost::dividable<QuadraticExpression, double>
   {
-    /*! Yup */
+    /*!
+      Construct a polynomial of degree 0, equal to the parameter.
+    */
     QuadraticExpression(double = 0);
-    /*! Yup */
+
+    /*!
+      Construct a single-variable, unitary, polynomial of degree 1.
+    */
     QuadraticExpression(const Variable&);
-    /*! Yup */
+
+    /*!
+      Construct a polynomial of degree 0 or 1, equal to the parameter.
+    */
     QuadraticExpression(const LinearExpression&);
 
-    /*! Yup */
+    /*! 
+      Add another QuadraticExpression to the current one.
+    */
     QuadraticExpression& operator +=(const QuadraticExpression&);
-    /*! Yup */
+
+    /*! 
+      Substract another QuadraticExpression to the current one.
+    */
     QuadraticExpression& operator -=(const QuadraticExpression&);
-    /*! Yup */
+
+    /*! 
+      Multiply the current QuadraticExpression by a constant.
+    */
     QuadraticExpression& operator *=(double);
-    /*! Yup */
+
+    /*! 
+      Divide the current QuadraticExpression by a constant.
+    */
     QuadraticExpression& operator /=(double);
 
-    /*! Yup */
+    // Not part of the public interface of the library
     std::set<Variable> getVariables() const;
-    /*! Yup */
     double getQuadraticCoefficient(const Variable&, const Variable&) const;
-    /*! Yup */
     double getLinearCoefficient(const Variable&) const;
-    /*! Yup */
     double getConstantCoefficient() const;
 
     static QuadraticExpression multiply(const LinearExpression&, const LinearExpression&);
@@ -107,21 +152,16 @@ namespace QuadProgMm {
       double constantCoefficient;
   };
 
-  /*! Yup */
+  /*!
+    A constraint.
+  */
+  // Contents not part of the public interface of the library
   struct Constraint {
-    /*! Yup */
-    enum Type {
-      /*! Yup */
-      ZERO,
-      /*! Yup */
-      POSITIVE
-    };
+    enum Type {ZERO, POSITIVE};
 
     Constraint(const LinearExpression&, Type);
 
-    /*! Yup */
     const LinearExpression& getLinearExpression() const;
-    /*! Yup */
     Type getType() const;
 
     private:
@@ -131,65 +171,67 @@ namespace QuadProgMm {
 }
 
 namespace QuadProgMm {
-  /*! Yup */
+  /**
+   * \defgroup arithmetic_operators Arithmetic operators of the DLS
+   * @{
+   */
   LinearExpression operator + (const Variable&);
-  /*! Yup */
   LinearExpression operator + (const LinearExpression&);
-  /*! Yup */
   QuadraticExpression operator + (const QuadraticExpression&);
 
-  /*! Yup */
   LinearExpression operator - (const Variable&);
-  /*! Yup */
   LinearExpression operator - (const LinearExpression&);
-  /*! Yup */
   QuadraticExpression operator - (const QuadraticExpression&);
 
-  /*! Yup */
   LinearExpression operator + (double, const Variable&);
-  /*! Yup */
   LinearExpression operator + (const Variable&, double);
-  /*! Yup */
   LinearExpression operator + (const Variable&, const Variable&);
 
-  /*! Yup */
   LinearExpression operator - (double, const Variable&);
-  /*! Yup */
   LinearExpression operator - (const Variable&, double);
-  /*! Yup */
   LinearExpression operator - (const Variable&, const Variable&);
 
-  /*! Yup */
   LinearExpression operator * (double, const Variable&);
-  /*! Yup */
   LinearExpression operator * (const Variable&, double);
 
-  /*! Yup */
   QuadraticExpression operator * (const LinearExpression&, const LinearExpression&);
 
-  /*! Yup */
   LinearExpression operator / (const Variable&, double);
+  /**@}*/
 
-  /*! Yup */
+  /**
+   * \defgroup comparison_operators Comparison operators of the DLS
+   * @{
+   */
   Constraint operator == (const LinearExpression&, const LinearExpression&);
-  /*! Yup */
   Constraint operator >= (const LinearExpression&, const LinearExpression&);
-  /*! Yup */
   Constraint operator <= (const LinearExpression&, const LinearExpression&);
+  /**@}*/
 }
 
 namespace QuadProgMm {
-  //! The result of an optimization
-  /*! Returned by minimize and maximize */
+  /*!
+    The result of an optimization.
+
+    Returned by \ref minimize and \ref maximize.
+  */
   struct Solution {
-    //! Get the optimal value of the QuadraticExpression
+    /*!
+      Get the optimal value of the QuadraticExpression.
+
+      This is the minimal value of the QuadraticExpression passed to \ref minimize and its maximum value when using \ref maximize.
+    */
     double getCost() const {return cost;}
 
-    //! Get the value a variable must take to reach the optimum
-    // Behavior is undefined when calling with a variable that was not part of the problem
+    /*!
+      Get the value a variable must take to reach the optimum.
+
+      Behavior is undefined when called with a variable that was not part of the QuadraticExpression optimized.
+    */
     double get(const Variable& v) const {return values.find(v)->second;}
 
     public:
+      // Not part of the public interface of the library
       Solution(double cost_, const std::map<Variable, double>& values_) : cost(cost_), values(values_) {}
 
     private:
@@ -197,10 +239,10 @@ namespace QuadProgMm {
       std::map<Variable, double> values;
   };
 
-  //! Minimize a QuadraticExpression subject to Constraints
+  //! Minimize a QuadraticExpression subject to \ref Constraint "Constraints"
   Solution minimize(const QuadraticExpression&, const std::vector<Constraint>& = std::vector<Constraint>());
 
-  //! Maximize a QuadraticExpression subject to Constraints
+  //! Maximize a QuadraticExpression subject to \ref Constraint "Constraints"
   Solution maximize(const QuadraticExpression&, const std::vector<Constraint>& = std::vector<Constraint>());
 }
 

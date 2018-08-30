@@ -37,11 +37,12 @@
 <h1>QuadProgMm<a class="headerlink" href="#quadprogmm" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="http://en.wikipedia.org/wiki/Quadratic_programming">Quadratic programming</a> problems are generally specified
-using matrices and vectors, because it is the generic mathematical form used by resolution algorithms.
-<em>QuadProgMm</em> is a C++ library providing a domain specific language to specify them as literal C++ equations on named variables.</p>
-<p>Note that <em>QuadProgMm</em> does <em>not</em> implement the arguably complex algorithms for solving these problems
-and delegates all the hard work to <a class="reference external" href="https://github.com/liuq/QuadProgpp">QuadProg++</a>, by Luca Di Gaspero.</p>
+<p><em>QuadProgMm</em> is a C++ library providing a domain specific language to express
+<a class="reference external" href="http://en.wikipedia.org/wiki/Quadratic_programming">Quadratic programming</a> problems as literal C++ equations on named variables.</p>
+<p>These problems are generally specified using matrices and vectors, because it is the generic mathematical form used by resolution algorithms.
+This is sometime tedius, and <em>QuadProgMm</em> tries to fix that.</p>
+<p>Note that <em>QuadProgMm</em> does <em>not</em> implement the arguably complex linear algebra algorithms for solving these problems
+and delegates all that hard work to <a class="reference external" href="https://github.com/liuq/QuadProgpp">QuadProg++</a>, by Luca Di Gaspero.</p>
 <p>It’s licensed under the <a class="reference external" href="http://choosealicense.com/licenses/mit/">MIT license</a>.
 Its <a class="reference external" href="http://jacquev6.github.io/QuadProgMm">documentation</a>
 and its <a class="reference external" href="https://github.com/jacquev6/QuadProgMm">source code</a> are on GitHub.</p>
@@ -108,15 +109,28 @@ $ ./quick_start
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="user_guide.html">User guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#includes">Includes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#variables">Variables</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#linear-and-quadratic-expressions">Linear and quadratic expressions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_guide.html#objectives-and-constraints">Objectives and constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide.html#constraints">Constraints</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide.html#solving">Solving</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_guide.html#degenerate-problems">Degenerate problems</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="spring_chain_example.html">Spring chain example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#include-file-and-namespace">Include file and namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#main-entry-points">Main entry points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference.html#domain-specific-language">Domain specific language</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference.html#linear-and-quadratic-expressions">Linear and quadratic expressions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="reference.html#classes">Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="reference.html#operators">Operators</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="reference.html#constraints">Constraints</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
