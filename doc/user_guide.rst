@@ -14,7 +14,7 @@ Variables
 
 ..  int main() {
 
-Quadratic problems aim at optimizing a quadratic form of several variables,
+Quadratic problems aim at optimizing a quadratic expression of several variables,
 subject to linear constraints on these variables.
 
 So, let's start with variables::
@@ -30,16 +30,16 @@ It is your responsibility to ensure that variables are utlimately only used by a
 
 @todo Variables have pointer semantics
 
-Linear and quadratic forms
-==========================
+Linear and quadratic expressions
+================================
 
-Variables can then be combined into linear forms using conventional operators and floating points::
+Variables can then be combined into linear expressions using conventional operators and floating points::
 
-    LinearForm l = 3.5 * a + b - c / 9.8 + 12;
+    LinearExpression l = 3.5 * a + b - c / 9.8 + 12;
 
 All operators producing degree zero or one polynoms are available::
 
-    std::vector<LinearForm> all_linear_forms {
+    std::vector<LinearExpression> all_linear_expressions {
       1, a, l,
       +a, +l, -a, -l,
       a + 1, 1 + a, a + b, a + l, l + a, l + l,
@@ -48,25 +48,25 @@ All operators producing degree zero or one polynoms are available::
       a / 2, l / 2,
     };
 
-Variables and linear forms can be combined into quadratic forms as well::
+Variables and linear expressions can be combined into quadratic expressions as well::
 
-    QuadraticForm q = 2.3 * l * l + a * b + c - d * l + 4;
+    QuadraticExpression q = 2.3 * l * l + a * b + c - d * l + 4;
 
-    std::vector<QuadraticForm> all_quadratic_forms {
+    std::vector<QuadraticExpression> all_quadratic_expressions {
       1, a, l, q,
       a * a, a * b,
       +q, -q,
       l * l,
     };
 
-Oh, and linear and quadratic forms are actually mutable::
+Oh, and linear and quadratic expressions are actually mutable::
 
     l += 1;
     q += l;
     q *= 2;
     // etc.
 
-@todo Linear and quadratic forms have value semantics
+@todo Linear and quadratic expressions have value semantics
 
 Objectives and constraints
 ==========================

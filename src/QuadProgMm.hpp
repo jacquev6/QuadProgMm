@@ -32,25 +32,25 @@ namespace QuadProgMm {
   };
 
   //! A degre-1 expression
-  struct LinearForm :
-    boost::addable<LinearForm>,
-    boost::subtractable<LinearForm>,
-    boost::multipliable<LinearForm, double>,
-    boost::dividable<LinearForm, double>
+  struct LinearExpression :
+    boost::addable<LinearExpression>,
+    boost::subtractable<LinearExpression>,
+    boost::multipliable<LinearExpression, double>,
+    boost::dividable<LinearExpression, double>
   {
     /*! Yup */
-    LinearForm(double = 0);
+    LinearExpression(double = 0);
     /*! Yup */
-    LinearForm(const Variable&);
+    LinearExpression(const Variable&);
 
     /*! Yup */
-    LinearForm& operator += (const LinearForm&);
+    LinearExpression& operator += (const LinearExpression&);
     /*! Yup */
-    LinearForm& operator -= (const LinearForm&);
+    LinearExpression& operator -= (const LinearExpression&);
     /*! Yup */
-    LinearForm& operator *= (double);
+    LinearExpression& operator *= (double);
     /*! Yup */
-    LinearForm& operator /= (double);
+    LinearExpression& operator /= (double);
 
     /*! Yup */
     std::set<Variable> getVariables() const;
@@ -60,34 +60,34 @@ namespace QuadProgMm {
     double getConstantCoefficient() const;
 
     private:
-      LinearForm(const std::map<Variable, double>&, double);
+      LinearExpression(const std::map<Variable, double>&, double);
       std::map<Variable, double> linearCoefficients;
       double constantCoefficient;
-      friend class QuadraticForm;
+      friend class QuadraticExpression;
   };
 
   //! A degre-2 expression
-  struct QuadraticForm :
-    boost::addable<QuadraticForm>,
-    boost::subtractable<QuadraticForm>,
-    boost::multipliable<QuadraticForm, double>,
-    boost::dividable<QuadraticForm, double>
+  struct QuadraticExpression :
+    boost::addable<QuadraticExpression>,
+    boost::subtractable<QuadraticExpression>,
+    boost::multipliable<QuadraticExpression, double>,
+    boost::dividable<QuadraticExpression, double>
   {
     /*! Yup */
-    QuadraticForm(double = 0);
+    QuadraticExpression(double = 0);
     /*! Yup */
-    QuadraticForm(const Variable&);
+    QuadraticExpression(const Variable&);
     /*! Yup */
-    QuadraticForm(const LinearForm&);
+    QuadraticExpression(const LinearExpression&);
 
     /*! Yup */
-    QuadraticForm& operator +=(const QuadraticForm&);
+    QuadraticExpression& operator +=(const QuadraticExpression&);
     /*! Yup */
-    QuadraticForm& operator -=(const QuadraticForm&);
+    QuadraticExpression& operator -=(const QuadraticExpression&);
     /*! Yup */
-    QuadraticForm& operator *=(double);
+    QuadraticExpression& operator *=(double);
     /*! Yup */
-    QuadraticForm& operator /=(double);
+    QuadraticExpression& operator /=(double);
 
     /*! Yup */
     std::set<Variable> getVariables() const;
@@ -98,10 +98,10 @@ namespace QuadProgMm {
     /*! Yup */
     double getConstantCoefficient() const;
 
-    static QuadraticForm multiply(const LinearForm&, const LinearForm&);
+    static QuadraticExpression multiply(const LinearExpression&, const LinearExpression&);
 
     private:
-      QuadraticForm(const std::map<std::pair<Variable, Variable>, double>&, const std::map<Variable, double>&, double);
+      QuadraticExpression(const std::map<std::pair<Variable, Variable>, double>&, const std::map<Variable, double>&, double);
       std::map<std::pair<Variable, Variable>, double> quadraticCoefficients;
       std::map<Variable, double> linearCoefficients;
       double constantCoefficient;
@@ -117,72 +117,72 @@ namespace QuadProgMm {
       POSITIVE
     };
 
-    Constraint(const LinearForm&, Type);
+    Constraint(const LinearExpression&, Type);
 
     /*! Yup */
-    const LinearForm& getLinearForm() const;
+    const LinearExpression& getLinearExpression() const;
     /*! Yup */
     Type getType() const;
 
     private:
-      LinearForm linearForm;
+      LinearExpression linearExpression;
       Type type;
   };
 }
 
 namespace QuadProgMm {
   /*! Yup */
-  LinearForm operator + (const Variable&);
+  LinearExpression operator + (const Variable&);
   /*! Yup */
-  LinearForm operator + (const LinearForm&);
+  LinearExpression operator + (const LinearExpression&);
   /*! Yup */
-  QuadraticForm operator + (const QuadraticForm&);
+  QuadraticExpression operator + (const QuadraticExpression&);
 
   /*! Yup */
-  LinearForm operator - (const Variable&);
+  LinearExpression operator - (const Variable&);
   /*! Yup */
-  LinearForm operator - (const LinearForm&);
+  LinearExpression operator - (const LinearExpression&);
   /*! Yup */
-  QuadraticForm operator - (const QuadraticForm&);
+  QuadraticExpression operator - (const QuadraticExpression&);
 
   /*! Yup */
-  LinearForm operator + (double, const Variable&);
+  LinearExpression operator + (double, const Variable&);
   /*! Yup */
-  LinearForm operator + (const Variable&, double);
+  LinearExpression operator + (const Variable&, double);
   /*! Yup */
-  LinearForm operator + (const Variable&, const Variable&);
+  LinearExpression operator + (const Variable&, const Variable&);
 
   /*! Yup */
-  LinearForm operator - (double, const Variable&);
+  LinearExpression operator - (double, const Variable&);
   /*! Yup */
-  LinearForm operator - (const Variable&, double);
+  LinearExpression operator - (const Variable&, double);
   /*! Yup */
-  LinearForm operator - (const Variable&, const Variable&);
+  LinearExpression operator - (const Variable&, const Variable&);
 
   /*! Yup */
-  LinearForm operator * (double, const Variable&);
+  LinearExpression operator * (double, const Variable&);
   /*! Yup */
-  LinearForm operator * (const Variable&, double);
+  LinearExpression operator * (const Variable&, double);
 
   /*! Yup */
-  QuadraticForm operator * (const LinearForm&, const LinearForm&);
+  QuadraticExpression operator * (const LinearExpression&, const LinearExpression&);
 
   /*! Yup */
-  LinearForm operator / (const Variable&, double);
+  LinearExpression operator / (const Variable&, double);
 
   /*! Yup */
-  Constraint operator == (const LinearForm&, const LinearForm&);
+  Constraint operator == (const LinearExpression&, const LinearExpression&);
   /*! Yup */
-  Constraint operator >= (const LinearForm&, const LinearForm&);
+  Constraint operator >= (const LinearExpression&, const LinearExpression&);
   /*! Yup */
-  Constraint operator <= (const LinearForm&, const LinearForm&);
+  Constraint operator <= (const LinearExpression&, const LinearExpression&);
 }
 
 namespace QuadProgMm {
   //! The result of an optimization
   /*! Returned by minimize and maximize */
   struct Solution {
-    //! Get the optimal value of the QuadraticForm
+    //! Get the optimal value of the QuadraticExpression
     double getCost() const {return cost;}
 
     //! Get the value a variable must take to reach the optimum
@@ -197,11 +197,11 @@ namespace QuadProgMm {
       std::map<Variable, double> values;
   };
 
-  //! Minimize a QuadraticForm subject to Constraints
-  Solution minimize(const QuadraticForm&, const std::vector<Constraint>& = std::vector<Constraint>());
+  //! Minimize a QuadraticExpression subject to Constraints
+  Solution minimize(const QuadraticExpression&, const std::vector<Constraint>& = std::vector<Constraint>());
 
-  //! Maximize a QuadraticForm subject to Constraints
-  Solution maximize(const QuadraticForm&, const std::vector<Constraint>& = std::vector<Constraint>());
+  //! Maximize a QuadraticExpression subject to Constraints
+  Solution maximize(const QuadraticExpression&, const std::vector<Constraint>& = std::vector<Constraint>());
 }
 
 #endif // Include guard

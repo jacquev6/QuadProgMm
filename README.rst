@@ -38,9 +38,9 @@ Create variables::
 
       Variable a, b, c;
 
-And a quadratic form to optimize::
+And a quadratic expression to optimize::
 
-      QuadraticForm q = a + b + (a - b) * (a - b) + c + (b - c) * (b - c);
+      QuadraticExpression q = a + b + (a - b) * (a - b) + c + (b - c) * (b - c);
 
 And constraints::
 

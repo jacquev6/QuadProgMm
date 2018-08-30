@@ -8,7 +8,7 @@
 namespace QuadProgMm {
   /* From QuadProg++:
 
-  The problem is in the form:
+  The problem is in the expression:
 
   min 0.5 * x G x + g0 x
   s.t.
@@ -45,7 +45,7 @@ namespace QuadProgMm {
 
   void translate(
     const std::vector<Variable>& variables,
-    const QuadraticForm& q,
+    const QuadraticExpression& q,
     quadprogpp::Matrix<double>& G,
     quadprogpp::Vector<double>& g0,
     double& g00
@@ -77,7 +77,7 @@ namespace QuadProgMm {
 
   void translate(
     const std::vector<Variable>& variables,
-    const LinearForm& l,
+    const LinearExpression& l,
     quadprogpp::Matrix<double>& CIE,
     quadprogpp::Vector<double>& cie0,
     int indexIE
@@ -91,7 +91,7 @@ namespace QuadProgMm {
     cie0[indexIE] = l.getConstantCoefficient();
   }
 
-  Translation translate(const QuadraticForm& q, const std::vector<Constraint>& constraints) {
+  Translation translate(const QuadraticExpression& q, const std::vector<Constraint>& constraints) {
     int p = 0;
     int m = 0;
     std::set<Variable> variables = q.getVariables();
@@ -104,7 +104,7 @@ namespace QuadProgMm {
           ++m;
           break;
       }
-      const std::set<Variable> constraintVariables = c.getLinearForm().getVariables();
+      const std::set<Variable> constraintVariables = c.getLinearExpression().getVariables();
       variables.insert(constraintVariables.begin(), constraintVariables.end());
     }
 
@@ -115,7 +115,7 @@ namespace QuadProgMm {
     int indexE = 0;
     int indexI = 0;
     foreach(Constraint c, constraints) {
-      const LinearForm& l = c.getLinearForm();
+      const LinearExpression& l = c.getLinearExpression();
 
       switch(c.getType()) {
         case Constraint::ZERO:

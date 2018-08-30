@@ -29,7 +29,7 @@ namespace QuadProgMm {
       Translation(const std::vector<Variable>&, int n, int p, int m);
   };
 
-  Translation translate(const QuadraticForm&, const std::vector<Constraint>&);
+  Translation translate(const QuadraticExpression&, const std::vector<Constraint>&);
 }
 
 #endif // Include guard

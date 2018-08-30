@@ -39,7 +39,7 @@ using namespace QuadProgMm;
   } \
 } while(false)
 
-#define CHECK_QUADRATIC_FORM_TRANSLATION(q, _G, _G0, expected_g00) do { \
+#define CHECK_QUADRATIC_EXPRESSION_TRANSLATION(q, _G, _G0, expected_g00) do { \
   const Translation t = translate(q, {}); \
   const std::vector<std::vector<double>> expected_G _G; \
   const std::vector<double> expected_g0 _G0; \
@@ -49,23 +49,23 @@ using namespace QuadProgMm;
   BOOST_CHECK_EQUAL(t.g00, expected_g00); \
 } while(false)
 
-BOOST_AUTO_TEST_CASE(TranslateQuadraticForm) {
+BOOST_AUTO_TEST_CASE(TranslateQuadraticExpression) {
   Variable a, b;
 
-  CHECK_QUADRATIC_FORM_TRANSLATION(0, {}, {}, 0);
-  CHECK_QUADRATIC_FORM_TRANSLATION(1, {}, {}, 1);
-  CHECK_QUADRATIC_FORM_TRANSLATION(a, {{0}}, {1}, 0);
-  CHECK_QUADRATIC_FORM_TRANSLATION(1 + a, {{0}}, {1}, 1);
-  CHECK_QUADRATIC_FORM_TRANSLATION(a*a, {{2}}, {0}, 0);
-  CHECK_QUADRATIC_FORM_TRANSLATION(1 + a*a, {{2}}, {0}, 1);
-  CHECK_QUADRATIC_FORM_TRANSLATION(1 + a + a*a, {{2}}, {1}, 1);
-  CHECK_QUADRATIC_FORM_TRANSLATION(0.5*a*a, {{1}}, {0}, 0);
-  CHECK_QUADRATIC_FORM_TRANSLATION(a*a + b*b, ({{2, 0}, {0, 2}}), ({0, 0}), 0);
-  CHECK_QUADRATIC_FORM_TRANSLATION(a*a + 0.5*b*b, ({{2, 0}, {0, 1}}), ({0, 0}), 0);
-  CHECK_QUADRATIC_FORM_TRANSLATION(0.5*b*b + a*a, ({{2, 0}, {0, 1}}), ({0, 0}), 0);
-  CHECK_QUADRATIC_FORM_TRANSLATION(a*b, ({{0, 1}, {1, 0}}), ({0, 0}), 0);
-  CHECK_QUADRATIC_FORM_TRANSLATION(b*a, ({{0, 1}, {1, 0}}), ({0, 0}), 0);
-  CHECK_QUADRATIC_FORM_TRANSLATION(a*a + 2*b*b + 3*b*a + 4*a + 5*b + 6, ({{2, 3}, {3, 4}}), ({4, 5}), 6);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(0, {}, {}, 0);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(1, {}, {}, 1);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(a, {{0}}, {1}, 0);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(1 + a, {{0}}, {1}, 1);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(a*a, {{2}}, {0}, 0);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(1 + a*a, {{2}}, {0}, 1);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(1 + a + a*a, {{2}}, {1}, 1);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(0.5*a*a, {{1}}, {0}, 0);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(a*a + b*b, ({{2, 0}, {0, 2}}), ({0, 0}), 0);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(a*a + 0.5*b*b, ({{2, 0}, {0, 1}}), ({0, 0}), 0);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(0.5*b*b + a*a, ({{2, 0}, {0, 1}}), ({0, 0}), 0);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(a*b, ({{0, 1}, {1, 0}}), ({0, 0}), 0);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(b*a, ({{0, 1}, {1, 0}}), ({0, 0}), 0);
+  CHECK_QUADRATIC_EXPRESSION_TRANSLATION(a*a + 2*b*b + 3*b*a + 4*a + 5*b + 6, ({{2, 3}, {3, 4}}), ({4, 5}), 6);
 }
 
 #define CHECK_EQUALITY_CONSTRAINT_TRANSLATION(c, _CE, _CE0) do { \

@@ -9,7 +9,7 @@
 #include "Translate.hpp"
 
 namespace QuadProgMm {
-  Solution minimize(const QuadraticForm& q, const std::vector<Constraint>& constraints) {
+  Solution minimize(const QuadraticExpression& q, const std::vector<Constraint>& constraints) {
     Translation t = translate(q, constraints);
 
     quadprogpp::Vector<double> x;
@@ -27,7 +27,7 @@ namespace QuadProgMm {
     return Solution(cost + t.g00, values);
   }
 
-  Solution maximize(const QuadraticForm& q, const std::vector<Constraint>& constraints) {
+  Solution maximize(const QuadraticExpression& q, const std::vector<Constraint>& constraints) {
     return minimize(-q, constraints);
   }
 }
