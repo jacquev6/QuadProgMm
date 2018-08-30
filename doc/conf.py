@@ -12,6 +12,23 @@ author = '<a href="http://vincent-jacques.net/">Vincent Jacques</a>'
 copyright = ('2010-2018 {} <script>var jacquev6_ribbon_github="{}"</script>'.format(author, project) +
              '<script src="https://jacquev6.github.io/ribbon.js"></script>')
 
+primary_domain = "cpp"
+nitpicky = True
+nitpick_ignore = [
+    ("cpp:identifier", "boost"),
+    ("cpp:identifier", "boost::addable<LinearForm>"),
+    ("cpp:identifier", "boost::addable<QuadraticForm>"),
+    ("cpp:identifier", "boost::dividable<LinearForm, double>"),
+    ("cpp:identifier", "boost::dividable<QuadraticForm, double>"),
+    ("cpp:identifier", "boost::multipliable<LinearForm, double>"),
+    ("cpp:identifier", "boost::multipliable<QuadraticForm, double>"),
+    ("cpp:identifier", "boost::subtractable<LinearForm>"),
+    ("cpp:identifier", "boost::subtractable<QuadraticForm>"),
+    ("cpp:identifier", "quadprogpp"),
+    ("cpp:identifier", "quadprogpp::Matrix<double>"),
+    ("cpp:identifier", "quadprogpp::Vector<double>"),
+]
+
 
 master_doc = "index"
 extensions = []
@@ -35,6 +52,13 @@ extensions.append("sphinx.ext.githubpages")
 extensions.append("sphinx.ext.mathjax")
 # mathjax_path
 
+# https://breathe.readthedocs.io/
+extensions.append("breathe")
+breathe_projects = {
+    project: "../build/doxygen/xml/",
+}
+breathe_default_project = project
+breathe_default_members = ("members",)
 
 for input_file in ["../README.rst"] + glob.glob("*.rst"):
     with open(input_file) as in_f:

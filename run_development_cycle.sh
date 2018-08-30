@@ -31,6 +31,7 @@ done
 make tst
 
 rm -rf docs
+doxygen
 sphinx-build doc docs
 
 make post_doc

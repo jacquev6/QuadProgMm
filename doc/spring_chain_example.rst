@@ -30,7 +30,7 @@ It's a simple aggregate with the spring's strength, and unconstrained length::
 
 Then, a class for the chain.
 It has two boundaries (``left`` and ``right``),
-a vector of ``Spring``, and a vector of ``Variable`` for the positions to be computed::
+a vector of ``Spring``, and a vector of :class:`Variable <QuadProgMm::Variable>` for the positions to be computed::
 
     class SpringChain {
     public:
@@ -69,9 +69,9 @@ a vector of ``Spring``, and a vector of ``Variable`` for the positions to be com
       Solution solution;
     };
 
-``makePositions`` is required because ``Variable`` has a pointer semantic:
-when a ``Variable`` is copied, the copy refers to the same resolvable entity as the original.
-That's why an original ``Variable`` instance is required for each position to compute.
+``makePositions`` is required because :class:`Variable <QuadProgMm::Variable>` has a pointer semantic:
+when a :class:`Variable <QuadProgMm::Variable>` is copied, the copy refers to the same resolvable entity as the original.
+That's why an original :class:`Variable <QuadProgMm::Variable>` instance is required for each position to compute.
 
 Then, the most important part: the definition of ``SpringChain::resolve``::
 

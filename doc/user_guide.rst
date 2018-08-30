@@ -23,7 +23,7 @@ So, let's start with variables::
 
 This defines four instances representing the variables of your QP problem.
 Solving your quadratic problem means finding values for these variables.
-Once the problem is solved, these values can be retrieved using ``Variable::getValue`` (see below).
+Once the problem is solved, these values can be retrieved using :func:`QuadProgMm::Solution::get` (see below).
 
 It is your responsibility to ensure that variables are utlimately only used by a single call to ``solve``.
 @todo Maybe change the interface so that this is ensured by the library.

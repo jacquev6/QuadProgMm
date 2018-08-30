@@ -46,7 +46,7 @@ subject to linear constraints on these variables.</p>
 </div>
 <p>This defines four instances representing the variables of your QP problem.
 Solving your quadratic problem means finding values for these variables.
-Once the problem is solved, these values can be retrieved using <code class="docutils literal notranslate"><span class="pre">Variable::getValue</span></code> (see below).</p>
+Once the problem is solved, these values can be retrieved using <a class="reference internal" href="reference.html#_CPPv3NK10QuadProgMm8Solution3getERK8Variable" title="QuadProgMm::Solution::get"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">QuadProgMm::Solution::get()</span></code></a> (see below).</p>
 <p>It is your responsibility to ensure that variables are utlimately only used by a single call to <code class="docutils literal notranslate"><span class="pre">solve</span></code>.
 &#64;todo Maybe change the interface so that this is ensured by the library.</p>
 <p>&#64;todo Variables have pointer semantics</p>
