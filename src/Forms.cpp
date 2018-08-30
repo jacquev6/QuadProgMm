@@ -1,5 +1,5 @@
 // Header
-#include "Forms.hpp"
+#include "QuadProgMm.hpp"
 
 // Standard library
 #include <algorithm>

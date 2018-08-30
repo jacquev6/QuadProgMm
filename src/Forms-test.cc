@@ -2,7 +2,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
-#include "Forms.hpp"
+#include "QuadProgMm.hpp"
 using namespace QuadProgMm;
 
 void expect_linear_form_(const LinearForm&) {}

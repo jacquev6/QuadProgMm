@@ -11,7 +11,7 @@
 #undef solve
 
 // QuadProgMm
-#include "Forms.hpp"
+#include "QuadProgMm.hpp"
 
 namespace QuadProgMm {
   struct Translation {
