@@ -70,3 +70,6 @@ BOOST_AUTO_TEST_CASE(QuickStart) {
   BOOST_CHECK_CLOSE(s.get(c), 4, 0.001);
   BOOST_CHECK_CLOSE(s.getCost(), 16, 0.001);
 }
+
+// @todo Test degenerate cases like minimize(a*a-a*a)
+// Understand and document exceptions
